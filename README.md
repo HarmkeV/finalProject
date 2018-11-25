@@ -1,5 +1,7 @@
 // Harmke Vliek
+
 // 10989137
+
 // Proposal: propose an idea for the final project of the minor Programmeren
 
 # Proposal final project Datavisualisation
@@ -14,7 +16,7 @@ The visualisation of the solution will be a map of the municipalities of the Net
 
 The map with checkbox and the box containg information of the municipalty are not optional, the box containg the information of the members of parliament, national religious creed and the difference between that box and the municipalities is optional. 
 
-![Example visualisation](/doc/exampleFPDS.jpg)
+![Example visualisation](/doc/exampleFPDS_2.jpg)
 
 **Prerequisites**
 
