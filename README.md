@@ -1,3 +1,7 @@
+// Harmke Vliek
+// 10989137
+// Proposal: propose an idea for the final project of the minor Programmeren
+
 # Proposal final project Datavisualisation
 
 **Problem statement**
