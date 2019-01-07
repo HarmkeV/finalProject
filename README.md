@@ -12,9 +12,7 @@ The number of people who go to church or identify as a member of religions has d
 
 **Solution**
 
-The visualisation of the solution will be a map of the municipalities of the Netherlands with a checkbox, it will show both the seats of political parties, represented in pie charts, and the percentages of people identifying themselves with a religion. This will provide an overview of the correlation between religious convictions and voting behavior.
-
-The map with checkbox and the box containg information of the municipalty are not optional, the box containg the information of the members of parliament, national religious creed and the difference between that box and the municipalities is optional. 
+The visualisation of the solution will be a map of the municipalities of the Netherlands displaying the biggest political party in the municipality. When one clicks on a province, a pie chart regarding the distribution of seats in council and a pie chart regarding the percentage of people who identify as a follower of a religion will appear. Finally, a scatterplot will be displayed rendering the amount of seats of a political party in council and the perctages of religious faith. 
 
 ![Example visualisation](/doc/exampleFPDS_2.jpg)
 
@@ -24,11 +22,11 @@ The map with checkbox and the box containg information of the municipalty are no
 
 The datasource containing information regarding religion is the file 'Kerkelijke gezindte en kerkbezoek naar gemeenten' on this website of the CBS: https://www.cbs.nl/nl-nl/nieuws/2016/51/helft-nederlanders-is-kerkelijk-of-religieus. This file contains the amount of time an resident of the municipality visits a religious building and the distribution of religous beliefs in the municipality. The preprossing of this file will result in the distribution of creed per municipality in a json file.
 
-The datasource containing information regarding voting behaviour is applied for by the PBL. 
+The datasource containing information regarding voting behaviour is obtained from https://www.verkiezingsuitslagen.nl/. 
 
 *external components*
 
-The libraries needed for this project will be chart.js, pandas and D3.
+The libraries needed for this project will be chart.js, pandas, a librabry providing an svg with al the municipalities of the Netherlands and D3.
 
 *related visualizations*
 
@@ -38,4 +36,4 @@ Another interesting visualisation is rendered on this website, published by the 
 
 *hardest parts*
 
-The hardest part of this visualisation will be the comparison between two different municipalities, or the comparison between one municipality and the national parliament. Another hard part is making sure the right information will appear in the box containing the pie charts, this will be easier if all municipalities are assigned an individual id in both datasets. 
+The hardest part of this visualisation will be the comparison between two different municipalities. Another hard part is making sure the right information will appear in the box containing the pie charts, this will be easier if all municipalities are assigned an individual id in both datasets, which is not the case right now. 
