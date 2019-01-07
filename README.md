@@ -36,4 +36,4 @@ Another interesting visualisation is rendered on this website, published by the 
 
 *hardest parts*
 
-The hardest part of this visualisation will be the comparison between two different municipalities. Another hard part is making sure the right information will appear in the box containing the pie charts, this will be easier if all municipalities are assigned an individual id in both datasets, which is not the case right now. 
+The hardest part of this visualisation will be the comparison between two different municipalities. Another hard part is making sure the right information will appear in the box containing the pie charts, this will be easier if all municipalities are assigned an individual id in both datasets, which is not the case right now.   
