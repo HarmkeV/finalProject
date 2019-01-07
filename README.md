@@ -14,7 +14,7 @@ The number of people who go to church or identify as a member of a religion has 
 
 The visualisation of the solution will be a map of the municipalities of the Netherlands displaying the biggest political party in the municipality. When one clicks on a province, a pie chart regarding the distribution of seats in council and a pie chart regarding the percentage of people who identify as a follower of a religion will appear. Finally, a scatterplot will be displayed rendering the amount of seats of a political party in council and the perctages of religious faith. 
 
-![Example visualisation](/doc/proposal_voorbeeld.jpg)
+![Example visualisation](/doc/proposal_voorbeeld.png)
 
 **Prerequisites**
 
