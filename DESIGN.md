@@ -12,7 +12,11 @@ information are rendered on the site https://lfverkiezingen2018.appspot.com/publ
 create a json file myself. These two json files will contain the data necessary for the visualisation.
 
 ## Diagram with an overview of the technical components of the visualisation
+
+### Data
 * Python code to convert csv files to json files
+
+### Visualisation
 * Map of the Dutch municipalities
   - on onmouseclick, pie chart and scatterplot regarding seat distribution and correlation between religion and political preference         appear per municipality
   - on mouseover, the amount of seats of the biggest political party appears
@@ -28,7 +32,7 @@ create a json file myself. These two json files will contain the data necessary 
     - pie chart regarding distribution of religious followers
 
 ## Descriptions of each of the components
-*
+* 
 * Svg containing a map of the Dutch municipalities, obtained from https://code.highcharts.com/mapdata/countries/nl/nl-all-all.svg
 *
 *
