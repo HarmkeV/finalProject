@@ -11,8 +11,12 @@ The data regarding the distribution of seats in council is can't be found in fre
 * [Seats in coucil](https://lfverkiezingen2018.appspot.com/public/builds/f8p2ht/index.html)
 
 ## Diagram with an overview of the technical components of the visualisation
+Code
+![design](/doc/designdiagram.png)
+
 Diagram on first entry
 ![Diagram on first entry](/doc/proposal_voorbeeld-0.png)
+
 Diagram on interaction
 ![Diagram on interaction](/doc/design_voorbeeld.png)
 
