@@ -1,5 +1,6 @@
 # Design document 
-Name: Harmke VLiek
+Name: Harmke Vliek
+
 Student number: 10989137
 
 ## List of data sources
@@ -24,4 +25,5 @@ create a json file myself. These two json files will contain the data necessary 
  
 ## List of APIs or D3 plugins that you will be using to provide functionality in your app
 [Legend](https://github.com/susielu/d3-legend)
+
 [Color schemes](https://github.com/d3/d3-scale-chromatic) 
