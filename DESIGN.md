@@ -14,8 +14,15 @@ create a json file myself. These two json files will contain the data necessary 
 ## Diagram with an overview of the technical components of the visualisation
 * python code to convert csv files to json files
 * map of the Dutch municipalities
+  - on onmouseclick, pie chart and scatterplot regarding seat distribution and correlation between religion and political preference
+  - on mouseover, the amount of seats of the biggest political party appears
+  - legend with colorcoded political parties
 * pie chart
+  - displays data of municipality regarding seat distribution
+  - title containing name of municipality
+  - legend 
 * scatter plot
+  - title containing name of municipality
 
 ## Descriptions of each of the components
 *
