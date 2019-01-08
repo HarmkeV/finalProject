@@ -12,25 +12,28 @@ information are rendered on the site https://lfverkiezingen2018.appspot.com/publ
 create a json file myself. These two json files will contain the data necessary for the visualisation.
 
 ## Diagram with an overview of the technical components of the visualisation
-* python code to convert csv files to json files
-* map of the Dutch municipalities
-  - on onmouseclick, pie chart and scatterplot regarding seat distribution and correlation between religion and political preference
+* Python code to convert csv files to json files
+* Map of the Dutch municipalities
+  - on onmouseclick, pie chart and scatterplot regarding seat distribution and correlation between religion and political preference         appear per municipality
   - on mouseover, the amount of seats of the biggest political party appears
   - legend with colorcoded political parties
-* pie chart
+* Pie chart
   - displays data of municipality regarding seat distribution
   - title containing name of municipality
   - legend 
-* scatter plot
+* Scatter plot
   - title containing name of municipality
+ * Optional
+    - select for time period
+    - pie chart regarding distribution of religious followers
 
 ## Descriptions of each of the components
 *
-* svg containing a map of the Dutch municipalities, obtained from https://code.highcharts.com/mapdata/countries/nl/nl-all-all.svg
+* Svg containing a map of the Dutch municipalities, obtained from https://code.highcharts.com/mapdata/countries/nl/nl-all-all.svg
 *
 *
  
-## List of APIs or D3 plugins that you will be using to provide functionality in your app
+## List of D3 plugins providing functionality
 [Legend](https://github.com/susielu/d3-legend)
 
 [Color schemes](https://github.com/d3/d3-scale-chromatic) 
