@@ -35,5 +35,5 @@ The data regarding the distribution of seats in council is can't be found in fre
 * D3
 * [Svg containing a map of the Dutch municipalities](https://code.highcharts.com/mapdata/countries/nl/nl-all-all.svg)
 * [Legend](https://github.com/susielu/d3-legend)
-* [Color schemes](https://github.com/d3/d3-scale-chromatic) 
+* [Color schemes](https://github.com/d3/d3-scale-chromatic)   
 
