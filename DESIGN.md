@@ -1,4 +1,4 @@
-# Design document 
+# Design document
 Name: Harmke Vliek
 
 Student number: 10989137
@@ -12,7 +12,7 @@ The data regarding the distribution of seats in council is can't be found in fre
 
 ## Diagram with an overview of the technical components of the visualisation
 Code
-![design](/doc/designdiagram.png)
+![design](/doc/designdiagram2.png)
 
 Diagram on first entry
 ![Diagram on first entry](/doc/proposal_voorbeeld-0.png)
@@ -31,16 +31,15 @@ Diagram on interaction
 * Pie chart
   - displays data of municipality regarding seat distribution
   - title containing name of municipality
-  - legend 
+  - legend
 * Scatter plot
   - title containing name of municipality
  * Optional
     - select for time period
     - pie chart regarding distribution of religious followers
- 
+
 ## Plugins providing functionality
 * D3
 * [Svg containing a map of the Dutch municipalities](https://code.highcharts.com/mapdata/countries/nl/nl-all-all.svg)
 * [Legend](https://github.com/susielu/d3-legend)
 * [Color schemes](https://github.com/d3/d3-scale-chromatic)   
-
