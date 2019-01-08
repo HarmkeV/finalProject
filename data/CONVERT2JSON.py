@@ -25,7 +25,7 @@ def create_dict(input, list_variable):
     # fill dictionary, take year as key
     for row in input:
         data_dict[row[gem]] = {}
-        for var in list_variable:
+        for var in list_variable[1:]:
                 data_dict[row[gem]][var] = row[var]
 
     return data_dict
