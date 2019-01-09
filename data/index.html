@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+
+<!--
+Name: Harmke Vliek
+Studentnumber: 10989137
+Subject: Programmeerproject
+-->
+
 <html>
   <meta charset="utf-8" />
     <title>
@@ -6,11 +14,12 @@
       <head>
         <meta charset="utf-8">
         <title>Religie en Politieke overtuiging</title>
+        <script src="jqueryding.js"></script>
+        <script src="http://code.highcharts.com/maps/highmaps.js"></script>
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
-        <link rel="icon" type="image/x-icon" href="/doc/favicon.ico">
-        <script src="svg_provinces_nl.js"></script>
         <script type="text/javascript" src="visual.js"></script>
+        <link rel="shortcut icon" type="image/x-icon" href="/doc/favicon.ico">
         <link rel="stylesheet" type="text/css" href="style.css">
       </head>
       <body>
@@ -18,12 +27,17 @@
         <p>Name: Harmke Vliek</p>
         <p>Student number: 10989137</p>
         <p>Sources:
+          <br>
           <a href="https://www.cbs.nl/nl-nl/nieuws/2016/51/helft-nederlanders-is-kerkelijk-of-religieus">
              Kerkelijke gezindte (CBS 2015)
           </a>
+          <br>
           <a href="https://www.verkiezingsuitslagen.nl/verkiezingen/detail/GR20180321/671509">
              Uitslag gemeenteraadsverkiezingen (AD 2018)
           </a>
         </p>
+        <div id="map" style="width:48%; height:400px;"></div>
+        <div id="piechart" style="width:48%; height:200px;"></div>
+        <div id="scatter" style="width:48%; height:200px;"></div>
       </body>
 </html>

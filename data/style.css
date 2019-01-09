@@ -1,0 +1,19 @@
+/*
+Harmke Vliek
+10989137
+CSS for Programmeerproject
+*/
+
+html * {
+  font-family: sans-serif;
+  background-color: lightGray;
+}
+
+h2 {
+  text-align: center;
+}
+
+p {
+  text-align: center;
+  font-size: 10px;
+};
