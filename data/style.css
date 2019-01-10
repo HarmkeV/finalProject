@@ -17,3 +17,9 @@ p {
   text-align: center;
   font-size: 10px;
 };
+
+.loading {
+    margin-top: 10em;
+    text-align: center;
+    color: black;
+}
