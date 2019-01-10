@@ -5,21 +5,28 @@ Programmeerproject
 */
 
 window.onload = function() {
-  // load data from data.json
+  // load data from zetelverdeling.json
   d3.json('zetelverdeling.json')
     .then(function(data) {
        var municipality = Object.keys(data);
        var parties = Object.values(data);
 
-    // create map showing biggest political party
-    createMap(data, municipality, parties)
+  // load data from religie.json
+  d3.json('religie.json')
+    .then(function(data) {
+       var municipality_rel = Object.keys(data);
+       var church = Object.values(data);
 
-    // create pie chart concerning seat distribution
-    // createPieChart(data, municipality, parties)
+  // create map showing biggest political party
+  createMap(data, municipality_rel, church)
+
+  // create pie chart concerning seat distribution
+  // createPieChart(data, municipality, parties)
+  });
   });
 };
 
-function createMap(data, municipality, parties) {
+function createMap(data, municipality, church) {
   // set variables for svg
   var width = 400
   var height = 700
@@ -30,22 +37,47 @@ function createMap(data, municipality, parties) {
               .attr('width', width)
               .attr('height', height);
 
+  // select only "Geen kerkelijke gezindte"
+  var listAtheist = [];
+  for (index in church) {
+    listAtheist.push(church[index]["Geen kerkelijke gezindte"])
+  };
+
+  // set list to lowercase charachters
+  var list_municipalities_low = [];
+  for (i in municipality) {
+    list_municipalities_low.push(municipality[i].toLowerCase())
+  };
+
+  // set strings in listAtheist to numbers
+  var list_atheist_float = [];
+  for (i in listAtheist) {
+    list_atheist_float.push(parseFloat(listAtheist[i]))
+  }
+
+  // create a dict with the name of the municipality and the "geen kerkelijke gezindte"
+  dictAtheist = {};
+
+  for (i in list_municipalities_low) {
+    dictAtheist[list_municipalities_low[i]] = list_atheist_float[i]
+  }
+
   // show chart
   var data = [
-      ['nl-fr-gm0088', 0],
-      ['nl-3557-gm0448', 1],
-      ['nl-gr-gm1651', 2],
-      ['nl-ze-gm1676', 3],
-      ['nl-fr-gm1900', 4],
-      ['nl-3560-gm1924', 5],
-      ['nl-gr-gm0007', 6],
-      ['nl-fl-gm0050', 7],
-      ['nl-fl-gm0034', 8],
-      ['nl-ov-gm0193', 9],
-      ['nl-3559-gm0307', 10],
-      ['nl-3559-gm0308', 11],
-      ['nl-3557-gm1911', 12],
-      ['nl-3557-gm0398', 13],
+      ['nl-fr-gm0088', NaN],
+      ['nl-3557-gm0448', 61.2],
+      ['nl-gr-gm1651', 59.3],
+      ['nl-ze-gm1676', 49.9],
+      ['nl-fr-gm1900', 47.9],
+      ['nl-3560-gm1924', 43.1],
+      ['nl-gr-gm0007', 69.2],
+      ['nl-fl-gm0050', 58.0],
+      ['nl-fl-gm0034', 59.9],
+      ['nl-ov-gm0193', 51.9],
+      ['nl-3559-gm0307', 53.7],
+      ['nl-3559-gm0308', 54.5],
+      ['nl-3557-gm1911', 63.0],
+      ['nl-3557-gm0398', 57.8],
       ['nl-ov-gm0153', 14],
       ['nl-3557-gm0394', 15],
       ['nl-3557-gm0358', 16],
@@ -443,48 +475,50 @@ function createMap(data, municipality, parties) {
       ['undefined', 408]
   ];
 
-  // Create the chart
-  Highcharts.mapChart('#map', {
+  // Create chart regarding
+  Highcharts.mapChart('map', {
       chart: {
-          map: 'countries/nl/nl-all-all'
+          map: 'countries/nl/nl-all-all',
+          backgroundColor: '#D3D3D3'
       },
-
       title: {
-          text: 'Result council election 2018'
+          text: 'Secularization in the Netherlands'
       },
-
       subtitle: {
-          text: 'biggest party per municipality'
+          text: 'distribution of people without church affiliation'
       },
-
       mapNavigation: {
           enabled: true,
           buttonOptions: {
               verticalAlign: 'bottom'
           }
       },
-
       colorAxis: {
           min: 0
       },
 
       series: [{
           data: data,
-          name: 'Random data',
+          name: 'percentage of people without church affiliation',
           states: {
               hover: {
                   color: '#BADA55'
               }
           },
           dataLabels: {
-              enabled: true,
+              enabled: false,
               format: '{point.name}'
           }
       }]
   });
+  for (x in dictAtheist){
+    console.log("highcharts-name-" + x);
+    console.log(d3.select(".highcarts-name-" + x))
+  }
 }
 
 function createPieChart(data, municipality, parties) {
+  // chart source: https://codepen.io/alexmorgan/pen/XXzpZP
   // set variables for svg
   var width = 300;
   var height = 300;
@@ -503,45 +537,63 @@ function createPieChart(data, municipality, parties) {
               .style("background", "pink")
               .attr("transform", "translate(" + radius + "," + radius + ")")
 
-  // indicate separate data
-  let party = Object.keys(selection)
-  let seats = Object.values(selection)
+  // put data and keys into lists
+  var dataSet = selection;
+  var dataParty = Object.keys(selection);
+  var dataSeats = Object.values(selection);
 
-  // indicate distribution of pie chart
-  var data = d3.pie()
-               .sort(null)
-               .value(function(d) {
-                 return d
-               })
-               (seats);
+  // append g to svg
+  group = svg.append("g")
+             .style("position", "absolute")
+             .attr("transform",
+                   "translate(" + [250, 250] + ")");
 
-  // define arc generator function
-  var arc = d3.arc()
+  // define arc
+  arc = d3.arc()
               .innerRadius(0)
-              .outerRadius(radius)
-              .padAngle(.015)
-              .padRadius(20);
+              .outerRadius(200);
 
-  // define path elements for arc
-  var arcs = d3.enter()
-               .append("g")
-               .attr("transform", "translate(150, 150)")
-               .selectAll("path")
-               .data(data);
+  // define the pie
+  pie = d3.pie()
+              .value(function(d) {return d})
+              .sort(null);
 
-  // append path elements
-  arcs.enter()
-      .append("path")
-      .attr("d", arc)
-      .attr("fill", function(i) {
-        return color[i.data];
-      });
+  // create arcs with the data
+  path = group.datum(dataSet).selectAll("path")
+                  .data(pie)
+                  .enter()
+                  .append("path")
+                  .attr("d", arc)
+                  .attr("fill", function(d) {
+                    return colors[dataKeys[dataList.indexOf(d.data)]];
+                  })
 
+                  // interactivity for mouse hovering
+                  .on("mouseover", function(d){
+                    d3.select(this)
+                      .attr("stroke", "#e6550d")
+                    return (tooltip.style("visibility", "visible")
+                                   .text(d.data))
+                                   .style("z-index", 9999);
+                  })
+                  .on("mouseout", function(){
+                    d3.select(this)
+                      .attr("stroke", "black")
+                    return (tooltip.style("visibility", "hidden"));
+                  })
+                  .on("mousemove", function(d, i){
+                    return tooltip.style("top", event.clientY -
+                                         param.height / 8 + "px")
+                                  .style("left", event.clientX + "px");
+                  });
 
-  arcs.append("text")
-      .attr("transform", "translate(" + 10 + ")")
-      .attr("text-anchor", "middle")
-      .text(function(i) {
-        return party[i];
-      });
+  // add title
+  svg.append("text")
+     .attr("class", "text")
+     .attr("id", "pieTitle")
+     .attr("transform",
+           "translate("+[10, 10]+")")
+     .style("font-weight", "bold")
+     .style("font-size", "20")
+     .text(name);
 };
