@@ -17,6 +17,6 @@
 * Implemented map in a svg in a div on the index page.
 
 # Day 4
-* Found out quality of map was bad, found another one and implemented it. However, it is not yet complete as it is not filled with data according to plan.
-* Created pie chart, as I had never created one before and I thought it would be harder to create than a scatterplot.
-* Decided to fill map with the distribution of church affiliation instead of the biggest political party as I thought the pie chart also shows the seat distribution and this way the overview is more clear.
+* Found out quality of map was bad, found another one and implemented it. However, it is not yet complete as it is not filled with data according to plan,
+* Decided to fill map with the distribution of church affiliation instead of the biggest political party as I thought the pie chart also shows the seat distribution and this way the overview is more clear,
+* Struggling with connecting the data concerning secularization and the municipalities on the map.
