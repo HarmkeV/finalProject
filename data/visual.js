@@ -18,13 +18,13 @@ window.onload = function() {
        var church = Object.values(data);
 
   // create map showing biggest political party
-  // createMap(data, municipality_rel, church)
+  createMap(data, municipality_rel, church)
 
   // create pie chart concerning seat distribution
   createPieChart(data_pol, municipality, parties)
 
   // create scatterplot regarding distibution religious beliefs
-  // createScatterplot(data, municipality_rel, church)
+  createScatterplot(data, municipality_rel, church)
   });
   });
 };
@@ -514,19 +514,22 @@ function createMap(data, municipality, church) {
           }
       }]
   });
-  for (x in dictAtheist){
-    console.log("highcharts-name-" + x);
-    console.log(d3.select(".highcarts-name-" + x))
-  }
+  // for (x in dictAtheist){
+  //   console.log("highcharts-name-" + x);
+  //   console.log(d3.select(".highcarts-name-" + x))
+  // }
 }
 
 function createPieChart(data, municipality, parties) {
-  // chart source: https://codepen.io/alexmorgan/pen/XXzpZP
+  // chart source: https://codepen.io/alexmorgan/pen/XXzpZP.
+  // legend is seperated into two parts because I wanted to sort them into rows
+  // but still use the d3.legend.
+
   // set variables for svg
   var width = 400;
   var height = 200;
-  var radius = 75;
-  var color = ['#543005','#8c510a','#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f','#01665e','#003c30'];
+  var radius = 80;
+  var color = ['#a50026','#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
 
   // select set to be seen on first entry
   var beginSet = "Nederland totaal";
@@ -548,14 +551,16 @@ function createPieChart(data, municipality, parties) {
               .style("background", "#D3D3D3")
 
   var group = svg.append("g")
-                 .attr("transform", "translate(100,100)")
+                 .attr("transform", "translate(100,120)")
                  .attr("class", "group");
 
    // insert a title
    svg.append("text")
-      .attr("transform", "translate(100,15)")
+      .attr("transform", "translate(60,25)")
       .attr("class", "pieTitle")
-      .text("distribution of seats in ")
+      .text(function () {
+        return "Distribution of seats in " + beginSet
+      })
       .style("font-size", "18px")
 
    // create arc
@@ -615,34 +620,52 @@ function createPieChart(data, municipality, parties) {
          .attr("fill", function(d, i) {return color[i]})
          .attr("stroke", "black");
 
-  // create legend
+  // create legend (1/2)
     var ord = d3.scaleOrdinal()
-                .domain(parties)
-                .range(color);
+                .domain(parties.slice(0,5))
+                .range(color.slice(0,5));
 
     svg.append("g")
        .attr("class", "legendOrdinal")
-       .attr("transform", "translate(200,25)");
+       .attr("transform", "translate(200,65)");
 
     var legOrd = d3.legendColor()
-                   .shape("path", d3.symbol().type(d3.symbolCircle).size(100)())
+                   .shape("path", d3.symbol().type(d3.symbolCircle).size(120)())
                    .shapePadding(10)
                    .scale(ord);
 
-    // draw the legend
+    // draw legend
     svg.select(".legendOrdinal")
-        .call(legOrd);
+        .call(legOrd)
+
+
+    // create legend (2/2)
+    var ord = d3.scaleOrdinal()
+                .domain(parties.slice(5,11))
+                .range(color.slice(5,11));
+
+    svg.append("g")
+       .attr("class", "legendOrdinal2")
+       .attr("transform", "translate(300,65)");
+
+    var legOrd = d3.legendColor()
+                   .shape("path", d3.symbol().type(d3.symbolCircle).size(120)())
+                   .shapePadding(10)
+                   .scale(ord);
+
+    // draw legend
+    svg.select(".legendOrdinal2")
+        .call(legOrd)
 
 };
 
 function createScatterplot(data, municipality_rel, church) {
   //
   // set variables for svg
-  var margin = {top: 20, right: 20, bottom: 30, left: 40},
-      width = 300 - margin.left - margin.right,
-      height = 300 - margin.top - margin.bottom;
-  var radius = 100;
-  var color = ['#543005','#8c510a','#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f','#01665e','#003c30'];
+  var width = 400;
+  var height = 200;
+  var radius = 75;
+  var color = ['#a50026','#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
 
   // select set to be seen on first entry
   var beginSet = "Nederland totaal";
@@ -653,7 +676,15 @@ function createScatterplot(data, municipality_rel, church) {
               .append("svg")
               .attr('width', width)
               .attr('height', height)
-              .style("background", "pink")
               .attr("transform", "translate(" + radius + "," + radius + ")")
+
+  // insert a title
+  svg.append("text")
+     .attr("transform", "translate(0,10)")
+     .attr("class", "scatterTitle")
+     .text(function () {
+       return "verhouding religie en politieke voorkeur " + beginSet
+     })
+     .style("font-size", "12px")
 
 }

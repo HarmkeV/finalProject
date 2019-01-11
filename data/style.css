@@ -60,3 +60,16 @@ scatter {
 
 .tooltip span {
     display: block;
+}
+
+#map {
+  float: left;
+}
+
+#piechart {
+  float: right;
+}
+
+#scatter {
+  float: right;
+}
