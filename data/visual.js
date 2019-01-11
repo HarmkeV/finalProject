@@ -7,9 +7,9 @@ Programmeerproject
 window.onload = function() {
   // load data from zetelverdeling.json
   d3.json('zetelverdeling.json')
-    .then(function(data) {
-       var municipality = Object.keys(data);
-       var parties = Object.values(data);
+    .then(function(data_pol) {
+       var municipality = Object.keys(data_pol);
+       var parties = Object.values(data_pol);
 
   // load data from religie.json
   d3.json('religie.json')
@@ -18,10 +18,13 @@ window.onload = function() {
        var church = Object.values(data);
 
   // create map showing biggest political party
-  createMap(data, municipality_rel, church)
+  // createMap(data, municipality_rel, church)
 
   // create pie chart concerning seat distribution
-  // createPieChart(data, municipality, parties)
+  createPieChart(data_pol, municipality, parties)
+
+  // create scatterplot regarding distibution religious beliefs
+  // createScatterplot(data, municipality_rel, church)
   });
   });
 };
@@ -520,80 +523,137 @@ function createMap(data, municipality, church) {
 function createPieChart(data, municipality, parties) {
   // chart source: https://codepen.io/alexmorgan/pen/XXzpZP
   // set variables for svg
-  var width = 300;
-  var height = 300;
-  var radius = 100;
+  var width = 400;
+  var height = 200;
+  var radius = 75;
   var color = ['#543005','#8c510a','#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f','#01665e','#003c30'];
 
   // select set to be seen on first entry
-  var beginSet = "Appingedam";
-  selection = data[beginSet]
+  var beginSet = "Nederland totaal";
+  var selection = data[beginSet];
+  var parties = Object.keys(selection);
+
+  // create tooltip
+  var toolTip = d3.select("body")
+                  .append("div")
+                  .attr("class", "tooltip")
+                  .style("opacity", "0")
+                  .style("display", "none");
 
   // create svg
   var svg = d3.select("#piechart")
               .append("svg")
               .attr('width', width)
               .attr('height', height)
+              .style("background", "#D3D3D3")
+
+  var group = svg.append("g")
+                 .attr("transform", "translate(100,100)")
+                 .attr("class", "group");
+
+   // insert a title
+   svg.append("text")
+      .attr("transform", "translate(100,15)")
+      .attr("class", "pieTitle")
+      .text("distribution of seats in ")
+      .style("font-size", "18px")
+
+   // create arc
+   arc = d3.arc()
+           .innerRadius(0)
+           .outerRadius(radius)
+
+   pie = d3.pie()
+           .padAngle(.015)
+           .value(function(d) { return selection[d] });
+
+   // bind data and append a group for each segment
+   var arcs = group.selectAll("arc")
+                   .data(pie(parties))
+                   .enter()
+                   .append("g")
+                   .attr("class","arc")
+                   .on("mouseover", function(d) {
+                     d3.select(this)
+                       .style("cursor", "pointer")
+                       .style("stroke-width", "3px")
+                          toolTip
+                           .transition()
+                           .duration(300)
+                           .style("opacity", "99")
+                           .style("display", "block")
+                   })
+
+                   // keep the tooltip above the mouse when mouse is on bar
+                   .on("mousemove", function(d) {
+                      d3.select(this)
+                      toolTip
+                        .html("<div id='thumbnail'><span> seats:" + d.value + "</div>")
+                        .style("left", (d3.event.pageX - 60) + "px")
+                        .style("top", (d3.event.pageY - 40) + "px")
+                   })
+
+                   // remove tooltip and restore colour
+                   .on("mouseout", function(d, i) {
+                      d3.select(this)
+                        .style("cursor", "normal")
+                        .style("stroke-width", "1px")
+                      toolTip
+                          .transition()
+                          .duration(300)
+                          .style("opacity", "100")
+                          .style("display", "none")
+                   })
+                   .on("click", function(d) {
+                     tip = d.data
+                     updateTip(tip)
+                   })
+
+   // draw arcs
+   arcs.append("path")
+         .attr("d", arc)
+         .attr("fill", function(d, i) {return color[i]})
+         .attr("stroke", "black");
+
+  // create legend
+    var ord = d3.scaleOrdinal()
+                .domain(parties)
+                .range(color);
+
+    svg.append("g")
+       .attr("class", "legendOrdinal")
+       .attr("transform", "translate(200,25)");
+
+    var legOrd = d3.legendColor()
+                   .shape("path", d3.symbol().type(d3.symbolCircle).size(100)())
+                   .shapePadding(10)
+                   .scale(ord);
+
+    // draw the legend
+    svg.select(".legendOrdinal")
+        .call(legOrd);
+
+};
+
+function createScatterplot(data, municipality_rel, church) {
+  //
+  // set variables for svg
+  var margin = {top: 20, right: 20, bottom: 30, left: 40},
+      width = 300 - margin.left - margin.right,
+      height = 300 - margin.top - margin.bottom;
+  var radius = 100;
+  var color = ['#543005','#8c510a','#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f','#01665e','#003c30'];
+
+  // select set to be seen on first entry
+  var beginSet = "Nederland totaal";
+  selection = data[beginSet]
+
+  // create svg
+  var svg = d3.select("#scatter")
+              .append("svg")
+              .attr('width', width)
+              .attr('height', height)
               .style("background", "pink")
               .attr("transform", "translate(" + radius + "," + radius + ")")
 
-  // put data and keys into lists
-  var dataSet = selection;
-  var dataParty = Object.keys(selection);
-  var dataSeats = Object.values(selection);
-
-  // append g to svg
-  group = svg.append("g")
-             .style("position", "absolute")
-             .attr("transform",
-                   "translate(" + [250, 250] + ")");
-
-  // define arc
-  arc = d3.arc()
-              .innerRadius(0)
-              .outerRadius(200);
-
-  // define the pie
-  pie = d3.pie()
-              .value(function(d) {return d})
-              .sort(null);
-
-  // create arcs with the data
-  path = group.datum(dataSet).selectAll("path")
-                  .data(pie)
-                  .enter()
-                  .append("path")
-                  .attr("d", arc)
-                  .attr("fill", function(d) {
-                    return colors[dataKeys[dataList.indexOf(d.data)]];
-                  })
-
-                  // interactivity for mouse hovering
-                  .on("mouseover", function(d){
-                    d3.select(this)
-                      .attr("stroke", "#e6550d")
-                    return (tooltip.style("visibility", "visible")
-                                   .text(d.data))
-                                   .style("z-index", 9999);
-                  })
-                  .on("mouseout", function(){
-                    d3.select(this)
-                      .attr("stroke", "black")
-                    return (tooltip.style("visibility", "hidden"));
-                  })
-                  .on("mousemove", function(d, i){
-                    return tooltip.style("top", event.clientY -
-                                         param.height / 8 + "px")
-                                  .style("left", event.clientX + "px");
-                  });
-
-  // add title
-  svg.append("text")
-     .attr("class", "text")
-     .attr("id", "pieTitle")
-     .attr("transform",
-           "translate("+[10, 10]+")")
-     .style("font-weight", "bold")
-     .style("font-size", "20")
-     .text(name);
-};
+}
