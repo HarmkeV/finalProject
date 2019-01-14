@@ -24,7 +24,7 @@ window.onload = function() {
   createPieChart(data_pol, municipality, parties)
 
   // create scatterplot regarding distibution religious beliefs
-  createScatterplot(data, municipality_rel, church)
+  createSecond(data, municipality_rel, church)
   });
   });
 };
@@ -566,11 +566,11 @@ function createPieChart(data, municipality, parties) {
 
    // create arc
    arc = d3.arc()
-           .innerRadius(0)
+           .innerRadius(5)
            .outerRadius(radius)
 
    pie = d3.pie()
-           .padAngle(.015)
+           .padAngle(.05)
            .value(function(d) { return selection[d] });
 
    // bind data and append a group for each segment
@@ -660,32 +660,146 @@ function createPieChart(data, municipality, parties) {
 
 };
 
-function createScatterplot(data, municipality_rel, church) {
-  //
+function createSecond(data, municipality_rel, church) {
   // set variables for svg
   var width = 400;
   var height = 200;
   var radius = 75;
-  var color = ['#a50026','#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
+  var color = ['#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4'];
 
   // select set to be seen on first entry
   var beginSet = "Nederland totaal";
   selection = data[beginSet]
 
-  // create svg
-  var svg = d3.select("#scatter")
-              .append("svg")
-              .attr('width', width)
-              .attr('height', height)
-              .attr("transform", "translate(" + radius + "," + radius + ")")
+   // set variables for svg
+   var width = 600;
+   var height = 200;
+   var radius = 80;
+   var color = ['#b35806','#e08214','#fdb863','#fee0b6','#d8daeb','#b2abd2','#8073ac','#542788'];
 
-  // insert a title
-  svg.append("text")
-     .attr("transform", "translate(0,10)")
-     .attr("class", "scatterTitle")
-     .text(function () {
-       return "Verhouding religie en politieke voorkeur " + beginSet
-     })
-     .style("font-size", "12px")
+   // select set to be seen on first entry
+   var beginSet = "Nederland totaal";
+   var selection = data[beginSet];
+   var religion = Object.keys(selection);
 
-}
+   // create tooltip
+   var toolTip = d3.select("body")
+                   .append("div")
+                   .attr("class", "tooltipsecond")
+                   .style("opacity", "0")
+                   .style("display", "none");
+
+   // create svg
+   var svg = d3.select("#scatter")
+               .append("svg")
+               .attr('width', width)
+               .attr('height', height)
+
+   var group = svg.append("g")
+                  .attr("transform", "translate(100,120)")
+                  .attr("class", "group");
+
+   // insert a title
+   svg.append("text")
+      .attr("transform", "translate(60,25)")
+      .attr("class", "pieTitle")
+      .text(function () {
+        return "Religious affiliation in " + beginSet
+      })
+      .style("font-size", "18px")
+
+    // create arc
+    arc = d3.arc()
+            .innerRadius(5)
+            .outerRadius(radius)
+
+    pie = d3.pie()
+            .padAngle(.05)
+            .value(function(d) { return selection[d] });
+
+    // bind data and append a group for each segment
+    var arcs = group.selectAll("arc")
+                    .data(pie(religion))
+                    .enter()
+                    .append("g")
+                    .attr("class","arc")
+                    .on("mouseover", function(d) {
+                      d3.select(this)
+                        .style("cursor", "pointer")
+                        .style("stroke-width", "3px")
+                           toolTip
+                            .transition()
+                            .duration(300)
+                            .style("opacity", "99")
+                            .style("display", "block")
+                    })
+
+                    // keep the tooltip above the mouse when mouse is on bar
+                    .on("mousemove", function(d) {
+                       d3.select(this)
+                       toolTip
+                         .html("<div id='thumbnail'><span> percentage:" + d.value + "</div>")
+                         .style("left", (d3.event.pageX - 50) + "px")
+                         .style("top", (d3.event.pageY - 40) + "px")
+                    })
+
+                    // remove tooltip and restore colour
+                    .on("mouseout", function(d, i) {
+                       d3.select(this)
+                         .style("cursor", "normal")
+                         .style("stroke-width", "1px")
+                       toolTip
+                           .transition()
+                           .duration(300)
+                           .style("opacity", "100")
+                           .style("display", "none")
+                    })
+                    .on("click", function(d) {
+                      tip = d.data
+                      updateTip(tip)
+                    })
+
+    // draw arcs
+    arcs.append("path")
+          .attr("d", arc)
+          .attr("fill", function(d, i) {return color[i]})
+          .attr("stroke", "black");
+
+    // create legend (1/2)
+      var ord = d3.scaleOrdinal()
+                  .domain(religion.slice(0,4))
+                  .range(color.slice(0,4));
+
+      svg.append("g")
+         .attr("class", "legendOrdinal3")
+         .attr("transform", "translate(200,80)");
+
+      var legOrd = d3.legendColor()
+                     .shape("path", d3.symbol().type(d3.symbolCircle).size(120)())
+                     .shapePadding(10)
+                     .scale(ord);
+
+      // draw legend
+      svg.select(".legendOrdinal3")
+          .call(legOrd)
+
+
+      // create legend (2/2)
+      var ord = d3.scaleOrdinal()
+                  .domain(religion.slice(4,9))
+                  .range(color.slice(4,9));
+
+      svg.append("g")
+         .attr("class", "legendOrdinal4")
+         .attr("transform", "translate(410,80)");
+
+      var legOrd = d3.legendColor()
+                     .shape("path", d3.symbol().type(d3.symbolCircle).size(120)())
+                     .shapePadding(10)
+                     .scale(ord);
+
+      // draw legend
+      svg.select(".legendOrdinal4")
+          .call(legOrd)
+
+  };

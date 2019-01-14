@@ -24,3 +24,9 @@
 # Day 5
 * Finished first draft of pie chart, tooltip and legend. Not connected to map yet,
 * Tried to fill map again, failed.
+
+# Day 6
+* Filled map. I don't think I used the fastest way, however it works for now,
+* Created second pie chart regarding the distribution of religious affiliation because I think to compare two things, it has to formatted in the same visualisation. Otherwise in order to compare the two variables, an extra barrier of two different forms of visualisation will be added,
+* Wondered what I would create as the third visualisation, as I thought I would make a scatterplot as first but as it turns out that is not possible the way I wanted it,
+* Updated design webpage, put name under right  instead of top middle.
