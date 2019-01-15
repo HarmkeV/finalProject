@@ -34,4 +34,5 @@
 
 # Day 7
 * Decided the third visualisation will be a scatterplot with amount of seats and percentage of religion as axes, municipalities as dots and a dropdown menu with party and religion selection,
-* Started creating the scatterplot.
+* Started creating the scatterplot without interaction,
+* Saw result of scatterplot and wondered whether it was a good idea; probably not.

@@ -945,25 +945,11 @@ function createScatter(data_pol, data_rel, municipality_pol, parties, municipali
                     .attr("cy", function(d, i) {
                         return yScale(d.y);
                     })
-                    .attr("r", 6)
+                    .attr("r", 5)
                     .attr("stroke-opacity", .5)
                     .attr("stroke", "black")
                     .style("fill", "blue")
                     .attr("class", "normal");
-
-  // cmake sure each year has a label
-  var label = svg.selectAll("text")
-                 .data(municipality_rel)
-                 .enter()
-                 .append("text")
-                 .text(function(d) { return d; })
-                 .attr("x", function(d) {
-                    return xScale(points[d]["gemeente"]) + labelPadding;
-                 })
-                 .attr("y", function(d) {
-                    return yScale(points[d]["gemeente"]) + (labelPadding / 2);
-                 })
-                 .attr("class", "label");
 
  function createPointsT(rel, pol, part, kerk){
    points = []
