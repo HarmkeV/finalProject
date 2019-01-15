@@ -806,9 +806,9 @@ function createScatter(data_pol, data_rel, municipality_pol, parties, municipali
   var height = 300;
 
   // set begin data
-  var beginSet = "Nederland totaal";
-  selectionX = data_rel[beginSet]
-  selectionY = data_pol[beginSet]
+  var beginSet = "Appingedam"
+  var selectionX = data_rel[beginSet]
+  var selectionY = data_pol[beginSet]
 
   // create svg
   var svg = d3.select("#scatterplot")
@@ -823,17 +823,20 @@ function createScatter(data_pol, data_rel, municipality_pol, parties, municipali
      .attr("text-anchor", "middle")
      .style("font-size", "20px")
      .style("text-decoration", "bold")
-     .text("Scatterplot regarding political preference and relious affliation");
+     .text("Scatterplot regarding political preference and religious affliation");
 
- // set scales
- window.xScale = d3.scaleLinear()
-                .domain([check(selectionX, "min") - 1,
-                         check(selectionX, "max") + 1])
-                .range([50, 750]);
- window.yScale = d3.scaleLinear()
-                .domain([check(selectionY, "min") - 1,
-                         check(selectionY, "max") + 1])
-                .range([275, 10]);
+
+  function setScale(selectionX, selectionY) {
+   // set scales
+   window.xScale = d3.scaleLinear()
+                  .domain([check(selectionX, "min") - 1,
+                           check(selectionX, "max") + 1])
+                  .range([40, 1150]);
+   window.yScale = d3.scaleLinear()
+                  .domain([check(selectionY, "min") - 1,
+                           check(selectionY, "max") + 1])
+                  .range([275, 20]);
+   }
 
   function check(dataSet, stat) {
     // loop trough array to find min and max of the arrays
@@ -853,10 +856,12 @@ function createScatter(data_pol, data_rel, municipality_pol, parties, municipali
   };
 
   // draw scales
+  setScale(selectionX, selectionY)
+
   // create x axis ticks
   svg.append("g")
     .attr("class", "axis")
-    .attr("transform", "translate(0," + (275) + ")")
+    .attr("transform", "translate(0," + (280) + ")")
     .call(d3.axisBottom(xScale));
 
   // create y axis ticks
@@ -875,13 +880,109 @@ function createScatter(data_pol, data_rel, municipality_pol, parties, municipali
     .text("amount of seats")
     .style("font-size", "10px")
 
-    // create x axis label
-    svg.append("text")
-        .attr("transform",
-              "translate("+[(width - 100) / 2 +
-                             50,
-                             height]+")")
-        .style("text-anchor", "middle")
-        .text("percentage of religious affliation")
-        .style("font-size", "10px")
+  // create x axis label
+  svg.append("text")
+      .attr("transform",
+            "translate("+[(width - 100) / 2 +
+                           50,
+                           height]+")")
+      .style("text-anchor", "middle")
+      .text("percentage of religious affliation")
+      .style("font-size", "10px")
+
+   // create dropdown menu (1/2)
+   var religion = ["Geen kerkelijke gezindte", "Rooms-katholiek", "Protestants", "Islam", "Joods", "Hindoe", "Boeddhist", "anders"];
+
+   var select = d3.select('#scatterplot')
+                  .append('select')
+                  .attr('class','select')
+                  .on('change',onchange)
+
+   var options = select
+                 .selectAll('option')
+                 .data(religion).enter()
+                 .append('option')
+                 .text(function (d) { return d; });
+
+   function onchange() {
+     selectValue = d3.select('select')
+                     .property('value')
+   }
+
+   // create dropdown menu (2/2)
+   var polParty = ["CDA", "VVD", "GL", "CU", "SGP", "PVDA", "SP", "D66", "Lokaal", "Overig"];
+
+   var select = d3.select('#scatterplot')
+                  .append('select')
+                  .attr('class','select')
+                  .on('change',onchange)
+
+   var options = select
+       .selectAll('option')
+       .data(polParty).enter()
+       .append('option')
+       .text(function (d) { return d; });
+
+    function onchange() {
+     selectValue = d3.select('select')
+                      .property('value')
+    }
+
+    polParty1 = "CDA"
+    religion1 = "Islam"
+
+  // set points in plot
+  points = createPointsT(data_rel, data_pol, polParty1, religion1);
+
+  // set circles to fill with points
+  var circles = svg.selectAll("circle")
+                    .data(points)
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function(d, i) {
+                          return xScale(d.x)
+                    })
+                    .attr("cy", function(d, i) {
+                        return yScale(d.y);
+                    })
+                    .attr("r", 6)
+                    .attr("stroke-opacity", .5)
+                    .attr("stroke", "black")
+                    .style("fill", "blue")
+                    .attr("class", "normal");
+
+  // cmake sure each year has a label
+  var label = svg.selectAll("text")
+                 .data(municipality_rel)
+                 .enter()
+                 .append("text")
+                 .text(function(d) { return d; })
+                 .attr("x", function(d) {
+                    return xScale(points[d]["gemeente"]) + labelPadding;
+                 })
+                 .attr("y", function(d) {
+                    return yScale(points[d]["gemeente"]) + (labelPadding / 2);
+                 })
+                 .attr("class", "label");
+
+ function createPointsT(rel, pol, part, kerk){
+   points = []
+
+   pols = Object.keys(pol);
+   pols.forEach(function(p){
+     tempObj = {}
+     tempObj["Gemeente"] = p;
+
+     // useless data out of list
+     if (rel[p] && pol[p][part] != null) {
+       if (rel[p][kerk] != ".") {
+         tempObj["x"] = parseFloat(rel[p][kerk])
+         tempObj["y"] = pol[p][part]
+          points.push(tempObj)
+      }
+     }
+   })
+   console.log(points)
+   return points;
+ }
 };

@@ -81,6 +81,10 @@ p {
     display: block;
 }
 
+select {
+  background-color: white; 
+}
+
 #map {
   float: left;
 }
