@@ -47,7 +47,7 @@ p {
   text-align: center;
   width: 100px;
   height:auto;
-  background-color: #C0C0C0;
+  background-color: #FFFFFF;
   border-radius: 3px;
   color: black;
   padding: 2px;
@@ -70,7 +70,7 @@ p {
   text-align: center;
   width: 140px;
   height:auto;
-  background-color: #C0C0C0;
+  background-color: #FFFFFF;
   border-radius: 3px;
   color: black;
   padding: 2px;
@@ -91,4 +91,9 @@ p {
 
 #scatter {
   float: right;
+}
+
+#scatterplot {
+  position: absolute;
+  top: 700px
 }

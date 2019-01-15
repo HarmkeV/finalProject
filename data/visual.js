@@ -798,13 +798,17 @@ function createSecond(data, municipality_rel, church) {
       // draw legend
       svg.select(".legendOrdinal4")
           .call(legOrd)
-
-  };
+};
 
 function createScatter(data_pol, data_rel, municipality_pol, parties, municipality_rel, church) {
   // set variables for svg
-  var width = 600;
+  var width = 1200;
   var height = 300;
+
+  // set begin data
+  var beginSet = "Nederland totaal";
+  selectionX = data_rel[beginSet]
+  selectionY = data_pol[beginSet]
 
   // create svg
   var svg = d3.select("#scatterplot")
@@ -812,8 +816,72 @@ function createScatter(data_pol, data_rel, municipality_pol, parties, municipali
               .attr('width', width)
               .attr('height', height)
 
-  // select set to be seen on first entry
-  var beginSet = "Nederland totaal";
-  var selection = data[beginSet]
+  // create title
+  svg.append("text")
+     .attr("x", (width / 2))
+     .attr("y", 15)
+     .attr("text-anchor", "middle")
+     .style("font-size", "20px")
+     .style("text-decoration", "bold")
+     .text("Scatterplot regarding political preference and relious affliation");
 
-}
+ // set scales
+ window.xScale = d3.scaleLinear()
+                .domain([check(selectionX, "min") - 1,
+                         check(selectionX, "max") + 1])
+                .range([50, 750]);
+ window.yScale = d3.scaleLinear()
+                .domain([check(selectionY, "min") - 1,
+                         check(selectionY, "max") + 1])
+                .range([275, 10]);
+
+  function check(dataSet, stat) {
+    // loop trough array to find min and max of the arrays
+    statistics = [];
+
+    for (index in dataSet) {
+        statistics.push(dataSet[index])
+    };
+
+    // find min and max of the array
+    if (stat === "max") {
+        return Math.max.apply(null, statistics);
+    }
+    else {
+        return Math.min.apply(null, statistics);
+    };
+  };
+
+  // draw scales
+  // create x axis ticks
+  svg.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(0," + (275) + ")")
+    .call(d3.axisBottom(xScale));
+
+  // create y axis ticks
+  svg.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(" + 60 + ",0)")
+    .call(d3.axisLeft(yScale));
+
+  // create y axis label
+  svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 5)
+    .attr("x",0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("amount of seats")
+    .style("font-size", "10px")
+
+    // create x axis label
+    svg.append("text")
+        .attr("transform",
+              "translate("+[(width - 100) / 2 +
+                             50,
+                             height]+")")
+        .style("text-anchor", "middle")
+        .text("percentage of religious affliation")
+        .style("font-size", "10px")
+};

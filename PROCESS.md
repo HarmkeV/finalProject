@@ -33,5 +33,5 @@
 * Updated design webpage, put name top right instead of top middle.
 
 # Day 7
-* Decided the third visualisation will be a scatterplot with amount of seats and percentage of religion as axes, municipalities as dots and a dropdown menu with party and religion selection.
-* Started creating that scatterplot
+* Decided the third visualisation will be a scatterplot with amount of seats and percentage of religion as axes, municipalities as dots and a dropdown menu with party and religion selection,
+* Started creating the scatterplot.
