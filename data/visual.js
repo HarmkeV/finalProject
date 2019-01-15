@@ -25,6 +25,9 @@ window.onload = function() {
 
   // create scatterplot regarding distibution religious beliefs
   createSecond(data, municipality_rel, church)
+
+  // create scatterplot
+  createScatter(data_pol, data, municipality, parties, municipality_rel, church)
   });
   });
 };
@@ -661,12 +664,6 @@ function createPieChart(data, municipality, parties) {
 };
 
 function createSecond(data, municipality_rel, church) {
-  // set variables for svg
-  var width = 400;
-  var height = 200;
-  var radius = 75;
-  var color = ['#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4'];
-
   // select set to be seen on first entry
   var beginSet = "Nederland totaal";
   selection = data[beginSet]
@@ -803,3 +800,20 @@ function createSecond(data, municipality_rel, church) {
           .call(legOrd)
 
   };
+
+function createScatter(data_pol, data_rel, municipality_pol, parties, municipality_rel, church) {
+  // set variables for svg
+  var width = 600;
+  var height = 300;
+
+  // create svg
+  var svg = d3.select("#scatterplot")
+              .append("svg")
+              .attr('width', width)
+              .attr('height', height)
+
+  // select set to be seen on first entry
+  var beginSet = "Nederland totaal";
+  var selection = data[beginSet]
+
+}

@@ -18,10 +18,6 @@ p {
   font-size: 10px;
 };
 
-a {
-  text-align: right;
-}
-
 .loading {
     margin-top: 10em;
     text-align: center;
