@@ -13,21 +13,21 @@ window.onload = function() {
 
   // load data from religie.json
   d3.json('religie.json')
-    .then(function(data) {
-       var municipality_rel = Object.keys(data);
-       var church = Object.values(data);
+    .then(function(data_rel) {
+       var municipality_rel = Object.keys(data_rel);
+       var church = Object.values(data_rel);
 
   // create map showing biggest political party
-  createMap(data, municipality_rel, church)
+  createMap(data_rel, municipality_rel, church)
 
   // create pie chart concerning seat distribution
-  createPiePol(data_pol, municipality, parties)
+  createPiePol(data_pol, municipality, parties, data_rel)
 
   // create piechart concerning religion
-  createPieRel(data, municipality_rel, church)
+  createPieRel(data_rel, municipality_rel, church, data_pol)
 
   // create scatterplot regarding distibution religious beliefs
-  createScatter(data_pol, data, municipality, parties, municipality_rel, church)
+  createScatter(data_pol, data_rel, municipality, parties, municipality_rel, church)
   });
   });
 };
@@ -511,18 +511,16 @@ function createMap(data, municipality, church) {
                           color: '#BADA55'
                       }
                   },
+                  events: {
+                    click: function (e) {
+                      console.log(e) // Hier linken aan pie charts
+                    },
+                  },
               }],
-              click: function(e) {
-                  console.log(
-                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', e.xAxis[0].value),
-                    e.yAxis[0].value
-                    )
-                  }
-            });
-
+            })
 }
 
-function createPiePol(data, municipality, parties) {
+function createPiePol(data_pol, municipality, parties, data_rel) {
   // chart source: https://codepen.io/alexmorgan/pen/XXzpZP.
   // legend is seperated into two parts because I wanted to sort them into rows
   // but still use the d3.legend.
@@ -535,7 +533,7 @@ function createPiePol(data, municipality, parties) {
 
   // select set to be seen on first entry
   var beginSet = "Nederland totaal";
-  var selection = data[beginSet];
+  var selection = data_pol[beginSet];
   var parties = Object.keys(selection);
 
   // create tooltip
@@ -611,9 +609,10 @@ function createPiePol(data, municipality, parties) {
                           .style("opacity", "100")
                           .style("display", "none")
                    })
+                   // update scatterplot
                    .on("click", function(d) {
-                     tip = d.data
-                     updateTip(tip)
+                     d3.select(".select2").property("value", d.data)
+                     onchange(data_rel, data_pol)
                    })
 
    // draw arcs
@@ -661,11 +660,7 @@ function createPiePol(data, municipality, parties) {
 
 };
 
-function createPieRel(data, municipality_rel, church) {
-  // select set to be seen on first entry
-  var beginSet = "Nederland totaal";
-  selection = data[beginSet]
-
+function createPieRel(data_rel, municipality_rel, church, data_pol) {
    // set variables for svg
    var width = 600;
    var height = 200;
@@ -674,7 +669,7 @@ function createPieRel(data, municipality_rel, church) {
 
    // select set to be seen on first entry
    var beginSet = "Nederland totaal";
-   var selection = data[beginSet];
+   var selection = data_rel[beginSet];
    var religion = Object.keys(selection);
 
    // create tooltip
@@ -749,9 +744,10 @@ function createPieRel(data, municipality_rel, church) {
                            .style("opacity", "100")
                            .style("display", "none")
                     })
+                    // update scatterplot
                     .on("click", function(d) {
-                      tip = d.data
-                      updateTip(tip)
+                      d3.select(".select").property("value", d.data)
+                      onchange(data_rel, data_pol)
                     })
 
     // draw arcs
@@ -804,7 +800,7 @@ function createScatter(data_pol, data_rel, municipality_pol, parties, municipali
   var height = 300;
 
   // create svg
-  var svg = d3.select("#scatterplot")
+  svg = d3.select("#scatterplot")
               .append("svg")
               .attr('width', width)
               .attr('height', height)
@@ -855,6 +851,9 @@ function createScatter(data_pol, data_rel, municipality_pol, parties, municipali
   selectValuePol = d3.select('.select2')
                      .property('value')
 
+  // update plot
+  onchange(data_rel, data_pol, selectValuePol, selectValueRel)
+
   // set points in plot
   points = createPoints(data_rel, data_pol, selectValuePol, selectValueRel);
 
@@ -863,12 +862,153 @@ function createScatter(data_pol, data_rel, municipality_pol, parties, municipali
 
   // draw plot
   makePlot(xScale, yScale, points)
+};
 
-  function onchange() {
-   selectValueRel = d3.select('.select')
-                      .property('value')
-   selectValuePol = d3.select('.select2')
-                      .property('value')
+function setScale(points) {
+ // set scales
+ window.xScale = d3.scaleLinear()
+                .domain([check(points, "x", "min"),
+                         check(points, "x", "max") + 1])
+                .range([65, 1150]);
+ window.yScale = d3.scaleLinear()
+                .domain([check(points, "y", "min"),
+                         check(points, "y", "max") + 1])
+                .range([275, 30]);
+};
+
+function check(dataSet, letter, stat) {
+  // loop trough array to find min and max of the arrays
+  statistics = [];
+
+  for (point in points) {
+      statistics.push(points[point][letter])
+  };
+
+  // find min and max of the array
+  if (stat === "max") {
+      return Math.max.apply(null, statistics);
+  }
+  else {
+
+      return Math.min.apply(null, statistics);
+  };
+};
+
+function makePlot(xScale, yScale, points) {
+  // set variables for svg
+  var width = 1200;
+  var height = 300;
+
+  // create x axis ticks
+  svg.append("g")
+    .attr("class", "axis")
+    .attr("id", "axisX")
+    .attr("transform", "translate(0," + (280) + ")")
+    .call(d3.axisBottom(xScale));
+
+  // create y axis ticks
+  svg.append("g")
+    .attr("class", "axis")
+    .attr("id", "axisY")
+    .attr("transform", "translate(" + 60 + ",0)")
+    .call(d3.axisLeft(yScale));
+
+  // create y axis label
+  svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 5)
+    .attr("x",0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("amount of seats")
+    .style("font-size", "10px")
+
+  // create x axis label
+  svg.append("text")
+      .attr("transform",
+            "translate("+[(width - 100) / 2 +
+                           50,
+                           height]+")")
+      .style("text-anchor", "middle")
+      .text("percentage of religious affliation")
+      .style("font-size", "10px")
+
+  // set circles to fill with points
+  var circles = svg.selectAll("circle")
+                    .data(points)
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function(d, i) {
+                          return xScale(d.x)
+                    })
+                    .attr("cy", function(d, i) {
+                        return yScale(d.y);
+                    })
+                    .attr("r", 5)
+                    .attr("stroke-opacity", .5)
+                    .attr("stroke", "black")
+                    .attr("id", function(d) {
+                      return d.Gemeente
+                    })
+                    .style("fill", "blue")
+                    .attr("class", "normal");
+}
+
+function createPoints(rel, pol, part, kerk){
+ points = []
+
+ pols = Object.keys(pol);
+ pols.forEach(function(p){
+   tempObj = {}
+   tempObj["Gemeente"] = p;
+
+   // useless data and Nederland totaal out of list
+   if (rel[p] && pol[p][part] != null) {
+     if (rel[p][kerk] != "." && p != "Nederland totaal") {
+       tempObj["x"] = parseFloat(rel[p][kerk])
+       tempObj["y"] = pol[p][part]
+        points.push(tempObj)
+    }
+   }
+ })
+ return points;
+}
+
+function updateCircle(points) {
+   svg.selectAll("circle")
+      .data(points)
+      .transition()
+      .attr("cx", function(d, i) {
+            return xScale(d.x)
+      })
+      .attr("cy", function(d, i) {
+          return yScale(d.y);
+      })
+      .attr("r", 5)
+      .attr("stroke-opacity", .5)
+      .attr("stroke", "black")
+      .attr("id", function(d) {
+        return d.Gemeente
+      })
+      .style("fill", "blue")
+      .attr("class", "normal");
+ }
+
+function updateAxis(points) {
+  svg.select("#axisY")
+     .transition()
+     .call(d3.axisLeft(yScale));
+
+  svg.select("#axisX")
+     .transition()
+     .call(d3.axisBottom(xScale))
+}
+
+function onchange(data_rel, data_pol) {
+   var selectValueRel = d3.select('.select')
+                          .property('value')
+   var selectValuePol = d3.select('.select2')
+                          .property('value')
 
   // set points in plot
   points = createPoints(data_rel, data_pol, selectValuePol, selectValueRel);
@@ -876,142 +1016,4 @@ function createScatter(data_pol, data_rel, municipality_pol, parties, municipali
   updateCircle(points)
   updateAxis(points)
 
-}
-
-  function setScale(points) {
-   // set scales
-   window.xScale = d3.scaleLinear()
-                  .domain([check(points, "x", "min"),
-                           check(points, "x", "max") + 1])
-                  .range([65, 1150]);
-   window.yScale = d3.scaleLinear()
-                  .domain([check(points, "y", "min"),
-                           check(points, "y", "max") + 1])
-                  .range([275, 30]);
-   }
-
-  function check(dataSet, letter, stat) {
-    // loop trough array to find min and max of the arrays
-    statistics = [];
-
-    for (point in points) {
-        statistics.push(points[point][letter])
-    };
-
-    // find min and max of the array
-    if (stat === "max") {
-        return Math.max.apply(null, statistics);
-    }
-    else {
-
-        return Math.min.apply(null, statistics);
-    };
-  };
-
-  function makePlot(xScale, yScale, points) {
-
-    // create x axis ticks
-    svg.append("g")
-      .attr("class", "axis")
-      .attr("id", "axisX")
-      .attr("transform", "translate(0," + (280) + ")")
-      .call(d3.axisBottom(xScale));
-
-    // create y axis ticks
-    svg.append("g")
-      .attr("class", "axis")
-      .attr("id", "axisY")
-      .attr("transform", "translate(" + 60 + ",0)")
-      .call(d3.axisLeft(yScale));
-
-    // create y axis label
-    svg.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 5)
-      .attr("x",0 - (height / 2))
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text("amount of seats")
-      .style("font-size", "10px")
-
-    // create x axis label
-    svg.append("text")
-        .attr("transform",
-              "translate("+[(width - 100) / 2 +
-                             50,
-                             height]+")")
-        .style("text-anchor", "middle")
-        .text("percentage of religious affliation")
-        .style("font-size", "10px")
-
-    // set circles to fill with points
-    var circles = svg.selectAll("circle")
-                      .data(points)
-                      .enter()
-                      .append("circle")
-                      .attr("cx", function(d, i) {
-                            return xScale(d.x)
-                      })
-                      .attr("cy", function(d, i) {
-                          return yScale(d.y);
-                      })
-                      .attr("r", 5)
-                      .attr("stroke-opacity", .5)
-                      .attr("stroke", "black")
-                      .attr("id", function(d) {
-                        return d.Gemeente
-                      })
-                      .style("fill", "blue")
-                      .attr("class", "normal");
-  }
-
-  function createPoints(rel, pol, part, kerk){
-   points = []
-
-   pols = Object.keys(pol);
-   pols.forEach(function(p){
-     tempObj = {}
-     tempObj["Gemeente"] = p;
-
-     // useless data and Nederland totaal out of list
-     if (rel[p] && pol[p][part] != null) {
-       if (rel[p][kerk] != "." && p != "Nederland totaal") {
-         tempObj["x"] = parseFloat(rel[p][kerk])
-         tempObj["y"] = pol[p][part]
-          points.push(tempObj)
-      }
-     }
-   })
-   return points;
- }
-
-  function updateCircle(points) {
-     svg.selectAll("circle")
-        .data(points)
-        .transition()
-        .attr("cx", function(d, i) {
-              return xScale(d.x)
-        })
-        .attr("cy", function(d, i) {
-            return yScale(d.y);
-        })
-        .attr("r", 5)
-        .attr("stroke-opacity", .5)
-        .attr("stroke", "black")
-        .attr("id", function(d) {
-          return d.Gemeente
-        })
-        .style("fill", "blue")
-        .attr("class", "normal");
-   }
-
-  function updateAxis(points) {
-    svg.select("#axisY")
-       .transition()
-       .call(d3.axisLeft(yScale));
-
-    svg.select("#axisX")
-       .transition()
-       .call(d3.axisBottom(xScale))
-  }
 };

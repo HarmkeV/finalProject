@@ -38,5 +38,6 @@
 * Saw result of scatterplot and wondered whether it was a good idea; probably not.
 
 # Day 8
-* Worked on scatterplot with interaction, however it is not yet finished as it is not yet connected to the pie charts,
-* Decided "Nederland totaal" should not be in the scatterplot, as it lengthens the scale abnormally.
+* Worked on scatterplot with interaction,
+* Decided "Nederland totaal" should not be in the scatterplot, as it lengthens the scale abnormally,
+* Connected pie charts to scatterplot; upon clicking the slice of the corresponding to a party or religion, the schatterplot changes to the indicated value.
