@@ -7,32 +7,34 @@ Programmeerproject
 window.onload = function() {
   // load data from zetelverdeling.json
   d3.json('zetelverdeling.json')
-    .then(function(data_pol) {
-       var municipality = Object.keys(data_pol);
-       var parties = Object.values(data_pol);
+    .then(function(dataPol) {
+       var municipality = Object.keys(dataPol);
+       var parties = Object.values(dataPol);
 
   // load data from religie.json
   d3.json('religie.json')
-    .then(function(data_rel) {
-       var municipality_rel = Object.keys(data_rel);
-       var church = Object.values(data_rel);
+    .then(function(dataRel) {
+       var municipalityRel = Object.keys(dataRel);
+       var church = Object.values(dataRel);
 
   // create map showing biggest political party
-  createMap(data_rel, municipality_rel, church)
+  createMap(dataRel, municipalityRel, church, dataPol)
 
   // create pie chart concerning seat distribution
-  createPiePol(data_pol, municipality, parties, data_rel)
+  createPiePol(dataPol, municipality, parties, dataRel)
 
   // create piechart concerning religion
-  createPieRel(data_rel, municipality_rel, church, data_pol)
+  createPieRel(dataRel, municipalityRel, church, dataPol)
 
   // create scatterplot regarding distibution religious beliefs
-  createScatter(data_pol, data_rel, municipality, parties, municipality_rel, church)
+  createScatter(dataPol, dataRel, municipality, parties, municipalityRel, church)
   });
   });
 };
 
-function createMap(data, municipality, church) {
+function createMap(data, municipality, church, dataPol) {
+  /* Shows map of the Netherlands containing data regarding secularization */
+
   // set variables for svg
   var width = 400
   var height = 700
@@ -69,7 +71,7 @@ function createMap(data, municipality, church) {
   }
 
   // show chart
-  var data_rel = [
+  var dataSecularization = [
       ['nl-fr-gm0088', NaN],
       ['nl-3557-gm0448', 61.2],
       ['nl-gr-gm1651', 59.3],
@@ -491,7 +493,7 @@ function createMap(data, municipality, church) {
                   text: 'Secularization in the Netherlands'
               },
               subtitle: {
-                  text: 'distribution of people without church affiliation'
+                  text: 'distribution of people without any church affiliation'
               },
               mapNavigation: {
                   enabled: true,
@@ -504,7 +506,7 @@ function createMap(data, municipality, church) {
                   max: 100
               },
               series: [{
-                  data: data_rel,
+                  data: dataSecularization,
                   name: 'percentage of people without church affiliation',
                   states: {
                       hover: {
@@ -513,27 +515,29 @@ function createMap(data, municipality, church) {
                   },
                   events: {
                     click: function (e) {
-                      console.log(e) // Hier linken aan pie charts
+                      var munName = e.point.name
+                      updatePieRel(data, munName)
+                      updatePiePol(dataPol, munName)
                     },
                   },
               }],
             })
 }
 
-function createPiePol(data_pol, municipality, parties, data_rel) {
-  // chart source: https://codepen.io/alexmorgan/pen/XXzpZP.
-  // legend is seperated into two parts because I wanted to sort them into rows
-  // but still use the d3.legend.
+function createPiePol(dataPol, municipality, parties, dataRel) {
+  /* Shows pie chart of data of Nederland totaal
+   *  chart source: https://codepen.io/alexmorgan/pen/XXzpZP.
+   *  legend is seperated into two parts because I wanted to sort them into rows
+   *  but still use the d3.legend.
+  */
 
   // set variables for svg
   var width = 400;
   var height = 200;
-  var radius = 80;
-  var color = ['#a50026','#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
 
   // select set to be seen on first entry
   var beginSet = "Nederland totaal";
-  var selection = data_pol[beginSet];
+  var selection = dataPol[beginSet];
   var parties = Object.keys(selection);
 
   // create tooltip
@@ -550,9 +554,9 @@ function createPiePol(data_pol, municipality, parties, data_rel) {
               .attr('height', height)
               .style("background", "#D3D3D3")
 
-  var group = svg.append("g")
-                 .attr("transform", "translate(100,120)")
-                 .attr("class", "group");
+  group = svg.append("g")
+             .attr("transform", "translate(100,120)")
+             .attr("class", "group");
 
    // insert a title
    svg.append("text")
@@ -562,6 +566,15 @@ function createPiePol(data_pol, municipality, parties, data_rel) {
         return "Distribution of seats in " + beginSet
       })
       .style("font-size", "18px")
+
+  drawPiePol(svg, group, dataRel, dataPol, selection, parties, toolTip)
+}
+
+function drawPiePol(svg, group, dataRel, dataPol, selection, parties, toolTip) {
+  /* Draws pie chart containing information pertaining distibution of seats in council */
+
+  var radius = 80;
+  var color = ['#a50026','#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
 
    // create arc
    arc = d3.arc()
@@ -612,7 +625,7 @@ function createPiePol(data_pol, municipality, parties, data_rel) {
                    // update scatterplot
                    .on("click", function(d) {
                      d3.select(".select2").property("value", d.data)
-                     onchange(data_rel, data_pol)
+                     onchange(dataRel, dataPol)
                    })
 
    // draw arcs
@@ -660,16 +673,50 @@ function createPiePol(data_pol, municipality, parties, data_rel) {
 
 };
 
-function createPieRel(data_rel, municipality_rel, church, data_pol) {
+function updatePiePol(dataPol, munName) {
+  /* Updates pie chart containing information pertaining distibution of seats
+   *in council upon clicking on the map
+  */
+
+  // update title
+  d3.select(".pieTitle")
+     .text(function () {
+       return "Distribution of seats in "  + munName
+     })
+     .style("font-size", "18px")
+
+  var selection = dataPol[munName];
+  var parties = Object.keys(selection);
+
+  pie = d3.pie()
+          .padAngle(.05)
+          .value(function(d) { return selection[d] });
+
+  // rescale segments
+  group.selectAll("path")
+       .data(pie(parties))
+       .transition()
+       .attr("d", arc)
+
+   // update the numberd bound to the arcs
+   group.selectAll(".arc")
+        .data(pie(parties))
+}
+
+function createPieRel(dataRel, municipalityRel, church, dataPol) {
+  /* Shows pie chart of data of Nederland totaal regarding religion
+   *  chart source: https://codepen.io/alexmorgan/pen/XXzpZP.
+   *  legend is seperated into two parts because I wanted to sort them into rows
+   *  but still use the d3.legend.
+  */
+
    // set variables for svg
    var width = 600;
    var height = 200;
-   var radius = 80;
-   var color = ['#b35806','#e08214','#fdb863','#fee0b6','#d8daeb','#b2abd2','#8073ac','#542788'];
 
    // select set to be seen on first entry
    var beginSet = "Nederland totaal";
-   var selection = data_rel[beginSet];
+   var selection = dataRel[beginSet];
    var religion = Object.keys(selection);
 
    // create tooltip
@@ -685,18 +732,28 @@ function createPieRel(data_rel, municipality_rel, church, data_pol) {
                .attr('width', width)
                .attr('height', height)
 
-   var group = svg.append("g")
-                  .attr("transform", "translate(100,120)")
-                  .attr("class", "group");
+   group = svg.append("g")
+              .attr("transform", "translate(100,120)")
+              .attr("class", "group");
 
    // insert a title
    svg.append("text")
       .attr("transform", "translate(60,25)")
-      .attr("class", "pieTitle")
+      .attr("class", "pieTitle1")
       .text(function () {
         return "Religious affiliation in " + beginSet
       })
       .style("font-size", "18px")
+
+      drawPieRel(svg, group, dataRel, dataPol, selection, religion, toolTip)
+}
+
+function drawPieRel (svg, group, dataRel, dataPol, selection, religion, toolTip) {
+  /* Draws pie chart containing information pertaining distibution of religion */
+
+    // set variables
+    var radius = 80;
+    var color = ['#b35806','#e08214','#fdb863','#fee0b6','#d8daeb','#b2abd2','#8073ac','#542788'];
 
     // create arc
     arc = d3.arc()
@@ -747,7 +804,7 @@ function createPieRel(data_rel, municipality_rel, church, data_pol) {
                     // update scatterplot
                     .on("click", function(d) {
                       d3.select(".select").property("value", d.data)
-                      onchange(data_rel, data_pol)
+                      onchange(dataRel, dataPol)
                     })
 
     // draw arcs
@@ -794,7 +851,42 @@ function createPieRel(data_rel, municipality_rel, church, data_pol) {
           .call(legOrd)
 };
 
-function createScatter(data_pol, data_rel, municipality_pol, parties, municipality_rel, church) {
+function updatePieRel(dataRel, munName) {
+  /* Updates pie chart containing information pertaining distibution of religion
+   * upon clicking on the map
+  */
+
+  // update title
+  d3.select(".pieTitle1")
+     .text(function () {
+       return "Religious affiliation in " + munName
+     })
+     .style("font-size", "18px")
+
+  var selection = dataRel[munName];
+  var religion = Object.keys(selection);
+
+  pie = d3.pie()
+          .padAngle(.05)
+          .value(function(d) { return selection[d] });
+
+  // rescale segments
+  group.selectAll("path")
+       .data(pie(religion))
+       .transition()
+       .attr("d", arc)
+
+   // update the numberd bound to the arcs
+   group.selectAll(".arc")
+        .data(pie(religion))
+}
+
+function createScatter(dataPol, dataRel, municipalityPol, parties, municipalityRel, church) {
+  /* Creates scatterplot showing all municipalities grouped based on the amount
+   * seats a party occupies and the percentage of people affliated to a religious
+   * group
+ */
+
   // set variables for svg
   var width = 1200;
   var height = 300;
@@ -852,10 +944,10 @@ function createScatter(data_pol, data_rel, municipality_pol, parties, municipali
                      .property('value')
 
   // update plot
-  onchange(data_rel, data_pol, selectValuePol, selectValueRel)
+  onchange(dataRel, dataPol, selectValuePol, selectValueRel)
 
   // set points in plot
-  points = createPoints(data_rel, data_pol, selectValuePol, selectValueRel);
+  points = createPoints(dataRel, dataPol, selectValuePol, selectValueRel);
 
   // draw scales
   setScale(points)
@@ -865,6 +957,8 @@ function createScatter(data_pol, data_rel, municipality_pol, parties, municipali
 };
 
 function setScale(points) {
+  /* Set scales of scatterplot */
+
  // set scales
  window.xScale = d3.scaleLinear()
                 .domain([check(points, "x", "min"),
@@ -877,6 +971,8 @@ function setScale(points) {
 };
 
 function check(dataSet, letter, stat) {
+  /* Finds min and max of array */
+
   // loop trough array to find min and max of the arrays
   statistics = [];
 
@@ -895,6 +991,8 @@ function check(dataSet, letter, stat) {
 };
 
 function makePlot(xScale, yScale, points) {
+  /* Draw scatterplot */
+
   // set variables for svg
   var width = 1200;
   var height = 300;
@@ -955,6 +1053,8 @@ function makePlot(xScale, yScale, points) {
 }
 
 function createPoints(rel, pol, part, kerk){
+  /* Determines position of points in plot */
+
  points = []
 
  pols = Object.keys(pol);
@@ -975,6 +1075,8 @@ function createPoints(rel, pol, part, kerk){
 }
 
 function updateCircle(points) {
+  /* Upon update; reposition circles */
+
    svg.selectAll("circle")
       .data(points)
       .transition()
@@ -995,6 +1097,8 @@ function updateCircle(points) {
  }
 
 function updateAxis(points) {
+  /* Upon update, either out of pie charts of out of dropdown; rescale axes */
+
   svg.select("#axisY")
      .transition()
      .call(d3.axisLeft(yScale));
@@ -1004,14 +1108,16 @@ function updateAxis(points) {
      .call(d3.axisBottom(xScale))
 }
 
-function onchange(data_rel, data_pol) {
+function onchange(dataRel, dataPol) {
+  /* Upon update; draw plot based on new values */
+
    var selectValueRel = d3.select('.select')
                           .property('value')
    var selectValuePol = d3.select('.select2')
                           .property('value')
 
   // set points in plot
-  points = createPoints(data_rel, data_pol, selectValuePol, selectValueRel);
+  points = createPoints(dataRel, dataPol, selectValuePol, selectValueRel);
   setScale(points)
   updateCircle(points)
   updateAxis(points)

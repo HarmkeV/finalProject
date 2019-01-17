@@ -41,3 +41,8 @@
 * Worked on scatterplot with interaction,
 * Decided "Nederland totaal" should not be in the scatterplot, as it lengthens the scale abnormally,
 * Connected pie charts to scatterplot; upon clicking the slice of the corresponding to a party or religion, the schatterplot changes to the indicated value.
+
+# Day 9
+* Connected map to pie chars, had to separate the functions creating the pie charts,
+* Code is still buggy, as tooltips do not work yet and the updating of pie charts is not fluent,
+* When pie charts are updated, update scatter doen not work anymore. Needs to be fixed.
