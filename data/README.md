@@ -8,7 +8,7 @@ The files containing code are CONVERT2JSON.py, style.css, index.html and visual.
 * The file [visual.js](visual.js) contains the code necessary to create all figures on the page.
 
 # Data
-The files containing data are favicon.ico, highcode.js, kerkelijke_gezindte_en_kerkbezoek_naar_gemeenten.csv, mapexp.js, mapnl.js, religie.json, svg_provinces_nl.js and zetelverdeling.json.
+The files containing data are favicon.ico, highcode.js, kerkelijke_gezindte_en_kerkbezoek_naar_gemeenten.csv, mapexp.js, mapnl.js, religie.json and zetelverdeling.json.
 * The file [favicon.ico](favicon.ico) contains the favicon of the webpage.
-* The files [highcode.js](highcode.js), [mapexp.js](mapexp.js), [mapnl.js](mapnl.js) and [svg_provinces_nl.js](svg_provinces_nl.js) are all files necessary to display the map of Dutch municipalities.
+* The files [highcode.js](highcode.js), [mapexp.js](mapexp.js) and [mapnl.js](mapnl.js) are all files necessary to display the map of Dutch municipalities.
 * The file [kerkelijke_gezindte_en_kerkbezoek_naar_gemeenten.csv](kerkelijke_gezindte_en_kerkbezoek_naar_gemeenten.csv) is converted into [religie.json](religie.json), a json file containing information pertaining the distribution of religion in the Netherlands and its municipalities. The other json file [zetelverdeling.json](zetelverdeling.json) contains information pertaining the distribution of seats in council per political party in municipalities of the Netherlands.

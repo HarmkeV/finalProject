@@ -690,7 +690,9 @@ function updatePiePol(dataPol, munName) {
 
   pie = d3.pie()
           .padAngle(.05)
-          .value(function(d) { return selection[d] });
+          .value(function(d) {
+            return selection[d]
+          });
 
   // rescale segments
   group.selectAll("path")
