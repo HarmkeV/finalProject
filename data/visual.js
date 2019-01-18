@@ -688,21 +688,21 @@ function updatePiePol(dataPol, munName) {
   var selection = dataPol[munName];
   var parties = Object.keys(selection);
 
-  pie = d3.pie()
+  piePol = d3.pie()
           .padAngle(.05)
-          .value(function(d) {
-            return selection[d]
-          });
+          .value(function(d) { return parseFloat(selection[d]) });
 
   // rescale segments
-  group.selectAll("path")
-       .data(pie(parties))
-       .transition()
+  group = d3.select(".group");
+  group = group.selectAll("path")
+               .data(piePol(parties))
+
+  group.transition()
        .attr("d", arc)
 
-   // update the numberd bound to the arcs
-   group.selectAll(".arc")
-        .data(pie(parties))
+  // update the numberd bound to the arcs
+  group.selectAll(".arc")
+       .data(piePol(parties))
 }
 
 function createPieRel(dataRel, municipalityRel, church, dataPol) {
@@ -736,7 +736,7 @@ function createPieRel(dataRel, municipalityRel, church, dataPol) {
 
    group = svg.append("g")
               .attr("transform", "translate(100,120)")
-              .attr("class", "group");
+              .attr("class", "group1");
 
    // insert a title
    svg.append("text")
@@ -765,6 +765,10 @@ function drawPieRel (svg, group, dataRel, dataPol, selection, religion, toolTip)
     pie = d3.pie()
             .padAngle(.05)
             .value(function(d) { return selection[d] });
+
+            console.log(religion);
+            console.log(pie(religion));
+
 
     // bind data and append a group for each segment
     var arcs = group.selectAll("arc")
@@ -868,19 +872,21 @@ function updatePieRel(dataRel, munName) {
   var selection = dataRel[munName];
   var religion = Object.keys(selection);
 
-  pie = d3.pie()
+  pieHier = d3.pie()
           .padAngle(.05)
-          .value(function(d) { return selection[d] });
+          .value(function(d) { return parseFloat(selection[d]) });
 
   // rescale segments
-  group.selectAll("path")
-       .data(pie(religion))
-       .transition()
+  group = d3.select(".group1");
+  group = group.selectAll("path")
+       .data(pieHier(religion))
+
+       group.transition()
        .attr("d", arc)
 
-   // update the numberd bound to the arcs
-   group.selectAll(".arc")
-        .data(pie(religion))
+  // update the numberd bound to the arcs
+  group.selectAll(".arc")
+       .data(pieHier(religion))
 }
 
 function createScatter(dataPol, dataRel, municipalityPol, parties, municipalityRel, church) {
@@ -911,10 +917,17 @@ function createScatter(dataPol, dataRel, municipalityPol, parties, municipalityR
   // create dropdown menu (1/2)
   var religion = ["Geen kerkelijke gezindte", "Rooms-katholiek", "Protestants", "Islam", "Joods", "Hindoe", "Boeddhist", "anders"];
 
+  // make sure right data gets put trough
   var select = d3.select('#scatterplot')
                  .append('select')
                  .attr('class','select')
-                 .on('change',onchange)
+                 .on('change',function() {
+                   selectValueRel = d3.select('.select')
+                                      .property('value')
+                   selectValuePol = d3.select('.select2')
+                                      .property('value')
+                   onchange(dataRel, dataPol, selectValuePol, selectValueRel)
+                 });
 
   var options = select
                 .selectAll('option')
@@ -927,10 +940,17 @@ function createScatter(dataPol, dataRel, municipalityPol, parties, municipalityR
   // create dropdown menu (2/2)
   var polParty = ["CDA", "VVD", "GL", "CU", "SGP", "PVDA", "SP", "D66", "Lokaal", "Overig"];
 
+  // make sure right data gets put trough
   var select = d3.select('#scatterplot')
                  .append('select')
                  .attr('class','select2')
-                 .on('change',onchange)
+                 .on('change', function() {
+                   selectValueRel = d3.select('.select')
+                                      .property('value')
+                   selectValuePol = d3.select('.select2')
+                                      .property('value')
+                   onchange(dataRel, dataPol, selectValuePol, selectValueRel)
+                 });
 
   var options = select
                 .selectAll('option')
