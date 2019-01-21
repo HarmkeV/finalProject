@@ -541,7 +541,7 @@ function createPiePol(dataPol, municipality, parties, dataRel) {
   var parties = Object.keys(selection);
 
   // create tooltip
-  var toolTip = d3.select("body")
+  toolTip = d3.select("body")
                   .append("div")
                   .attr("class", "tooltip")
                   .style("opacity", "0")
@@ -563,7 +563,7 @@ function createPiePol(dataPol, municipality, parties, dataRel) {
       .attr("transform", "translate(60,25)")
       .attr("class", "pieTitle")
       .text(function () {
-        return "Distribution of seats in " + beginSet
+        return "Distribution of seats in " + beginSet;
       })
       .style("font-size", "18px")
 
@@ -576,7 +576,7 @@ function drawPiePol(svg, group, dataRel, dataPol, selection, parties, toolTip) {
   var radius = 80;
   var color = ['#a50026','#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
 
-   // create arc
+   // set arc
    arc = d3.arc()
            .innerRadius(5)
            .outerRadius(radius)
@@ -585,7 +585,7 @@ function drawPiePol(svg, group, dataRel, dataPol, selection, parties, toolTip) {
            .padAngle(.05)
            .value(function(d) { return selection[d] });
 
-   // bind data and append a group for each segment
+   // create segments
    var arcs = group.selectAll("arc")
                    .data(pie(parties))
                    .enter()
@@ -602,16 +602,17 @@ function drawPiePol(svg, group, dataRel, dataPol, selection, parties, toolTip) {
                            .style("display", "block")
                    })
 
-                   // keep the tooltip above the mouse when mouse is on bar
+                   // locate tooltip
                    .on("mousemove", function(d) {
                       d3.select(this)
                       toolTip
-                        .html("<div id='thumbnail'><span> seats:" + d.value + "</div>")
+                        .style('visibility', 'visible')
+                        .text(d.value + " seats")
                         .style("left", (d3.event.pageX - 60) + "px")
                         .style("top", (d3.event.pageY - 40) + "px")
                    })
 
-                   // remove tooltip and restore colour
+                   // on mouseot, remove tooltip
                    .on("mouseout", function(d, i) {
                       d3.select(this)
                         .style("cursor", "normal")
@@ -700,9 +701,18 @@ function updatePiePol(dataPol, munName) {
   group.transition()
        .attr("d", arc)
 
-  // update the numberd bound to the arcs
-  group.selectAll(".arc")
-       .data(piePol(parties))
+  // update tooltip
+  d3.selectAll(".arc")
+    .data(piePol(parties))
+
+     // update tooltip
+     .on("mousemove", function(d) {
+        var seats = d.value
+        return(toolTip.style('visibility', 'visible')
+                      .text(seats + " seats")
+                      .style("left", (d3.event.pageX - 60) + "px")
+                      .style("top", (d3.event.pageY - 40) + "px"))
+        })
 }
 
 function createPieRel(dataRel, municipalityRel, church, dataPol) {
@@ -734,9 +744,9 @@ function createPieRel(dataRel, municipalityRel, church, dataPol) {
                .attr('width', width)
                .attr('height', height)
 
-   group = svg.append("g")
-              .attr("transform", "translate(100,120)")
-              .attr("class", "group1");
+   groupRel = svg.append("g")
+                 .attr("transform", "translate(100,120)")
+                 .attr("class", "group1");
 
    // insert a title
    svg.append("text")
@@ -747,10 +757,10 @@ function createPieRel(dataRel, municipalityRel, church, dataPol) {
       })
       .style("font-size", "18px")
 
-      drawPieRel(svg, group, dataRel, dataPol, selection, religion, toolTip)
+      drawPieRel(svg, groupRel, dataRel, dataPol, selection, religion, toolTip)
 }
 
-function drawPieRel (svg, group, dataRel, dataPol, selection, religion, toolTip) {
+function drawPieRel (svg, groupRel, dataRel, dataPol, selection, religion, toolTip) {
   /* Draws pie chart containing information pertaining distibution of religion */
 
     // set variables
@@ -766,20 +776,16 @@ function drawPieRel (svg, group, dataRel, dataPol, selection, religion, toolTip)
             .padAngle(.05)
             .value(function(d) { return selection[d] });
 
-            console.log(religion);
-            console.log(pie(religion));
-
-
     // bind data and append a group for each segment
-    var arcs = group.selectAll("arc")
-                    .data(pie(religion))
-                    .enter()
-                    .append("g")
-                    .attr("class","arc")
-                    .on("mouseover", function(d) {
-                      d3.select(this)
-                        .style("cursor", "pointer")
-                        .style("stroke-width", "3px")
+    var arcs = groupRel.selectAll("arc")
+                       .data(pie(religion))
+                       .enter()
+                       .append("g")
+                       .attr("class","arcRel")
+                       .on("mouseover", function(d) {
+                         d3.select(this)
+                           .style("cursor", "pointer")
+                           .style("stroke-width", "3px")
                            toolTip
                             .transition()
                             .duration(300)
@@ -787,12 +793,13 @@ function drawPieRel (svg, group, dataRel, dataPol, selection, religion, toolTip)
                             .style("display", "block")
                     })
 
-                    // keep the tooltip above the mouse when mouse is on bar
+                    // locate tooltip
                     .on("mousemove", function(d) {
                        d3.select(this)
                        toolTip
-                         .html("<div id='thumbnail'><span> percentage:" + d.value + "</div>")
-                         .style("left", (d3.event.pageX - 50) + "px")
+                         .style('visibility', 'visible')
+                         .text(d.value + "%")
+                         .style("left", (d3.event.pageX - 60) + "px")
                          .style("top", (d3.event.pageY - 40) + "px")
                     })
 
@@ -877,16 +884,25 @@ function updatePieRel(dataRel, munName) {
           .value(function(d) { return parseFloat(selection[d]) });
 
   // rescale segments
-  group = d3.select(".group1");
-  group = group.selectAll("path")
-       .data(pieHier(religion))
+  groupRel = d3.select(".group1");
+  groupRel = groupRel.selectAll("path")
+                     .data(pieHier(religion))
 
-       group.transition()
-       .attr("d", arc)
+  groupRel.transition()
+          .attr("d", arc)
 
-  // update the numberd bound to the arcs
-  group.selectAll(".arc")
-       .data(pieHier(religion))
+  // update the numbers bound to the arcs in tooltip
+  d3.selectAll(".arcRel")
+    .data(pieHier(religion))
+
+    // update tooltip
+    .on("mouseover", function(d) {
+        var percentage = d.value
+        return(toolTip.style('visibility', 'visible')
+                      .text(percentage + "%")
+                      .style("left", (d3.event.pageX - 60) + "px")
+                      .style("top", (d3.event.pageY - 40) + "px"))
+        })
 }
 
 function createScatter(dataPol, dataRel, municipalityPol, parties, municipalityRel, church) {
@@ -984,7 +1000,7 @@ function setScale(points) {
  // set scales
  window.xScale = d3.scaleLinear()
                 .domain([check(points, "x", "min"),
-                         check(points, "x", "max") + 1])
+                         check(points, "x", "max") + 0.5])
                 .range([65, 1150]);
  window.yScale = d3.scaleLinear()
                 .domain([check(points, "y", "min"),

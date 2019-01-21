@@ -52,3 +52,7 @@
 * Scatterplot plots out of updated pies as well, dropdown still makes axes disappear,
 * Fixed dropdown menu,
 * Started updating tooltips.
+
+# Day 11
+* Updated tooltip piePol, pieRel dit not work,
+* Tried arranging svg's differently, not enough space to place pie charts next to each other.

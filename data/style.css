@@ -68,7 +68,7 @@ p {
 .tooltipsecond {
   position:absolute;
   text-align: center;
-  width: 140px;
+  width: 80px;
   height:auto;
   background-color: #FFFFFF;
   border-radius: 3px;
@@ -82,7 +82,7 @@ p {
 }
 
 select {
-  background-color: white; 
+  background-color: white;
 }
 
 #map {
@@ -98,6 +98,5 @@ select {
 }
 
 #scatterplot {
-  position: absolute;
-  top: 700px
+  float: right;
 }
