@@ -6,13 +6,13 @@ Programmeerproject
 
 window.onload = function() {
   // load data from zetelverdeling.json
-  d3.json('zetelverdeling.json')
+  d3.json('data/zetelverdeling.json')
     .then(function(dataPol) {
        var municipality = Object.keys(dataPol);
        var parties = Object.values(dataPol);
 
   // load data from religie.json
-  d3.json('religie.json')
+  d3.json('data/religie.json')
     .then(function(dataRel) {
        var municipalityRel = Object.keys(dataRel);
        var church = Object.values(dataRel);
@@ -40,15 +40,15 @@ function createMap(data, municipality, church, dataPol) {
   var height = 700
 
   // create svg
-  var svg = d3.select("#map")
-              .append("svg")
+  var svg = d3.select('#map')
+              .append('svg')
               .attr('width', width)
               .attr('height', height);
 
-  // select only "Geen kerkelijke gezindte"
+  // select only 'Geen kerkelijke gezindte'
   var listAtheist = [];
   for (index in church) {
-    listAtheist.push(church[index]["Geen kerkelijke gezindte"])
+    listAtheist.push(church[index]['Geen kerkelijke gezindte'])
   };
 
   // set list to lowercase charachters
@@ -63,7 +63,7 @@ function createMap(data, municipality, church, dataPol) {
     list_atheist_float.push(parseFloat(listAtheist[i]))
   }
 
-  // create a dict with the name of the municipality and the "geen kerkelijke gezindte"
+  // create a dict with the name of the municipality and the 'geen kerkelijke gezindte'
   dictAtheist = {};
 
   for (i in list_municipalities_low) {
@@ -536,142 +536,143 @@ function createPiePol(dataPol, municipality, parties, dataRel) {
   var height = 200;
 
   // select set to be seen on first entry
-  var beginSet = "Nederland totaal";
+  var beginSet = 'Nederland totaal';
   var selection = dataPol[beginSet];
   var parties = Object.keys(selection);
 
   // create tooltip
-  toolTip = d3.select("body")
-                  .append("div")
-                  .attr("class", "tooltip")
-                  .style("opacity", "0")
-                  .style("display", "none");
+  toolTip = d3.select('body')
+                  .append('div')
+                  .attr('class', 'tooltip')
+                  .style('opacity', '0')
+                  .style('display', 'none');
 
   // create svg
-  var svg = d3.select("#piechart")
-              .append("svg")
+  var svg = d3.select('#piechart')
+              .append('svg')
               .attr('width', width)
               .attr('height', height)
-              .style("background", "#D3D3D3")
+              .style('background', '#D3D3D3')
 
-  group = svg.append("g")
-             .attr("transform", "translate(100,120)")
-             .attr("class", "group");
+  var group = svg.append('g')
+                 .attr('transform', 'translate(100,120)')
+                 .attr('class', 'group');
 
    // insert a title
-   svg.append("text")
-      .attr("transform", "translate(60,25)")
-      .attr("class", "pieTitle")
+   svg.append('text')
+      .attr('transform', 'translate(60,25)')
+      .attr('class', 'pieTitle')
       .text(function () {
-        return "Distribution of seats in " + beginSet;
+        return 'Distribution of seats in ' + beginSet;
       })
-      .style("font-size", "18px")
+      .style('font-size', '18px')
 
-  drawPiePol(svg, group, dataRel, dataPol, selection, parties, toolTip)
+  drawPiePol(svg, group, dataRel, dataPol, selection, parties)
 }
 
-function drawPiePol(svg, group, dataRel, dataPol, selection, parties, toolTip) {
+function drawPiePol(svg, group, dataRel, dataPol, selection, parties) {
   /* Draws pie chart containing information pertaining distibution of seats in council */
 
   var radius = 80;
   var color = ['#a50026','#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
 
-   // set arc
-   arc = d3.arc()
-           .innerRadius(5)
-           .outerRadius(radius)
+  // set arc
+  arc = d3.arc()
+          .innerRadius(5)
+          .outerRadius(radius)
 
-   pie = d3.pie()
-           .padAngle(.05)
-           .value(function(d) { return selection[d] });
+  pie = d3.pie()
+          .padAngle(.05)
+          .value(function(d) { return selection[d] });
 
-   // create segments
-   var arcs = group.selectAll("arc")
-                   .data(pie(parties))
-                   .enter()
-                   .append("g")
-                   .attr("class","arc")
-                   .on("mouseover", function(d) {
+  // create segments
+  var arcs = group.selectAll('arc')
+                  .data(pie(parties))
+                  .enter()
+                  .append('g')
+                  .attr('class','arc')
+                  .on('mouseover', function(d) {
                      d3.select(this)
-                       .style("cursor", "pointer")
-                       .style("stroke-width", "3px")
+                       .style('cursor', 'pointer')
+                       .style('stroke-width', '3px')
+                       return(
                           toolTip
                            .transition()
                            .duration(300)
-                           .style("opacity", "99")
-                           .style("display", "block")
-                   })
+                           .style('opacity', '99')
+                           .style('display', 'block'))
+                  })
 
-                   // locate tooltip
-                   .on("mousemove", function(d) {
-                      d3.select(this)
+                  // locate tooltip
+                  .on('mousemove', function(d) {
+                      return(
                       toolTip
                         .style('visibility', 'visible')
-                        .text(d.value + " seats")
-                        .style("left", (d3.event.pageX - 60) + "px")
-                        .style("top", (d3.event.pageY - 40) + "px")
-                   })
+                        .text(d.data + ': ' + d.value + ' seats')
+                        .style('left', (d3.event.pageX - 60) + 'px')
+                        .style('top', (d3.event.pageY - 40) + 'px'))
+                  })
 
-                   // on mouseot, remove tooltip
-                   .on("mouseout", function(d, i) {
+                  // on mouseot, remove tooltip
+                  .on('mouseout', function(d, i) {
                       d3.select(this)
-                        .style("cursor", "normal")
-                        .style("stroke-width", "1px")
+                        .style('cursor', 'normal')
+                        .style('stroke-width', '1px')
+                      return(
                       toolTip
                           .transition()
                           .duration(300)
-                          .style("opacity", "100")
-                          .style("display", "none")
-                   })
-                   // update scatterplot
-                   .on("click", function(d) {
-                     d3.select(".select2").property("value", d.data)
+                          .style('opacity', '100')
+                          .style('display', 'none'))
+                  })
+                  // update scatterplot
+                  .on('click', function(d) {
+                     d3.select('#selectPol').property('value', d.data)
                      onchange(dataRel, dataPol)
-                   })
+                  })
 
    // draw arcs
-   arcs.append("path")
-         .attr("d", arc)
-         .attr("fill", function(d, i) {return color[i]})
-         .attr("stroke", "black");
+   arcs.append('path')
+         .attr('d', arc)
+         .attr('fill', function(d, i) {return color[i]})
+         .attr('stroke', 'black');
 
-  // create legend (1/2)
-    var ord = d3.scaleOrdinal()
-                .domain(parties.slice(0,5))
-                .range(color.slice(0,5));
+   // create legend (1/2)
+   var ord = d3.scaleOrdinal()
+               .domain(parties.slice(0,5))
+               .range(color.slice(0,5));
 
-    svg.append("g")
-       .attr("class", "legendOrdinal")
-       .attr("transform", "translate(200,65)");
+   svg.append('g')
+      .attr('class', 'legendOrdinal')
+      .attr('transform', 'translate(200,65)');
 
-    var legOrd = d3.legendColor()
-                   .shape("path", d3.symbol().type(d3.symbolCircle).size(120)())
-                   .shapePadding(10)
-                   .scale(ord);
+   var legOrd = d3.legendColor()
+                  .shape('path', d3.symbol().type(d3.symbolCircle).size(120)())
+                  .shapePadding(10)
+                  .scale(ord);
 
-    // draw legend
-    svg.select(".legendOrdinal")
-        .call(legOrd)
+   // draw legend
+   svg.select('.legendOrdinal')
+       .call(legOrd)
 
 
-    // create legend (2/2)
-    var ord = d3.scaleOrdinal()
-                .domain(parties.slice(5,11))
-                .range(color.slice(5,11));
+   // create legend (2/2)
+   var ord = d3.scaleOrdinal()
+               .domain(parties.slice(5,11))
+               .range(color.slice(5,11));
 
-    svg.append("g")
-       .attr("class", "legendOrdinal2")
-       .attr("transform", "translate(300,65)");
+   svg.append('g')
+      .attr('class', 'legendOrdinal2')
+      .attr('transform', 'translate(270,65)');
 
-    var legOrd = d3.legendColor()
-                   .shape("path", d3.symbol().type(d3.symbolCircle).size(120)())
-                   .shapePadding(10)
-                   .scale(ord);
+   var legOrd = d3.legendColor()
+                  .shape('path', d3.symbol().type(d3.symbolCircle).size(120)())
+                  .shapePadding(10)
+                  .scale(ord);
 
-    // draw legend
-    svg.select(".legendOrdinal2")
-        .call(legOrd)
-
+   // draw legend
+   svg.select('.legendOrdinal2')
+      .call(legOrd)
 };
 
 function updatePiePol(dataPol, munName) {
@@ -680,11 +681,11 @@ function updatePiePol(dataPol, munName) {
   */
 
   // update title
-  d3.select(".pieTitle")
+  d3.select('.pieTitle')
      .text(function () {
-       return "Distribution of seats in "  + munName
+       return 'Distribution of seats in '  + munName
      })
-     .style("font-size", "18px")
+     .style('font-size', '18px')
 
   var selection = dataPol[munName];
   var parties = Object.keys(selection);
@@ -694,25 +695,25 @@ function updatePiePol(dataPol, munName) {
           .value(function(d) { return parseFloat(selection[d]) });
 
   // rescale segments
-  group = d3.select(".group");
-  group = group.selectAll("path")
+  group = d3.select('.group');
+  group = group.selectAll('path')
                .data(piePol(parties))
 
   group.transition()
-       .attr("d", arc)
+       .attr('d', arc)
 
   // update tooltip
-  d3.selectAll(".arc")
+  d3.selectAll('.arc')
     .data(piePol(parties))
 
-     // update tooltip
-     .on("mousemove", function(d) {
-        var seats = d.value
-        return(toolTip.style('visibility', 'visible')
-                      .text(seats + " seats")
-                      .style("left", (d3.event.pageX - 60) + "px")
-                      .style("top", (d3.event.pageY - 40) + "px"))
-        })
+  // update tooltip
+  .on('mousemove', function(d) {
+      var seats = d.value
+      return(toolTip.style('visibility', 'visible')
+                    .text(d.data + ': ' + seats + ' seats')
+                    .style('left', (d3.event.pageX - 60) + 'px')
+                    .style('top', (d3.event.pageY - 40) + 'px'))
+   })
 }
 
 function createPieRel(dataRel, municipalityRel, church, dataPol) {
@@ -723,145 +724,139 @@ function createPieRel(dataRel, municipalityRel, church, dataPol) {
   */
 
    // set variables for svg
-   var width = 600;
+   var width = 430;
    var height = 200;
 
    // select set to be seen on first entry
-   var beginSet = "Nederland totaal";
+   var beginSet = 'Nederland totaal';
    var selection = dataRel[beginSet];
    var religion = Object.keys(selection);
 
-   // create tooltip
-   var toolTip = d3.select("body")
-                   .append("div")
-                   .attr("class", "tooltipsecond")
-                   .style("opacity", "0")
-                   .style("display", "none");
-
    // create svg
-   var svg = d3.select("#scatter")
-               .append("svg")
+   var svg = d3.select('#scatter')
+               .append('svg')
                .attr('width', width)
                .attr('height', height)
 
-   groupRel = svg.append("g")
-                 .attr("transform", "translate(100,120)")
-                 .attr("class", "group1");
+   groupRel = svg.append('g')
+                 .attr('transform', 'translate(100,120)')
+                 .attr('class', 'group1');
 
    // insert a title
-   svg.append("text")
-      .attr("transform", "translate(60,25)")
-      .attr("class", "pieTitle1")
+   svg.append('text')
+      .attr('transform', 'translate(60,25)')
+      .attr('class', 'pieTitle1')
       .text(function () {
-        return "Religious affiliation in " + beginSet
+        return 'Religious affiliation in ' + beginSet
       })
-      .style("font-size", "18px")
+      .style('font-size', '18px')
 
-      drawPieRel(svg, groupRel, dataRel, dataPol, selection, religion, toolTip)
+   drawPieRel(svg, groupRel, dataRel, dataPol, selection, religion)
 }
 
-function drawPieRel (svg, groupRel, dataRel, dataPol, selection, religion, toolTip) {
+function drawPieRel (svg, groupRel, dataRel, dataPol, selection, religion) {
   /* Draws pie chart containing information pertaining distibution of religion */
 
-    // set variables
-    var radius = 80;
-    var color = ['#b35806','#e08214','#fdb863','#fee0b6','#d8daeb','#b2abd2','#8073ac','#542788'];
+  // set variables
+  var radius = 80;
+  var color = ['#b35806','#e08214','#fdb863','#fee0b6','#d8daeb','#b2abd2','#8073ac','#542788'];
 
-    // create arc
-    arc = d3.arc()
-            .innerRadius(5)
-            .outerRadius(radius)
+  // create arc
+  arc = d3.arc()
+          .innerRadius(5)
+          .outerRadius(radius)
 
-    pie = d3.pie()
-            .padAngle(.05)
-            .value(function(d) { return selection[d] });
+  pie = d3.pie()
+          .padAngle(.05)
+          .value(function(d) { return selection[d] });
 
-    // bind data and append a group for each segment
-    var arcs = groupRel.selectAll("arc")
-                       .data(pie(religion))
-                       .enter()
-                       .append("g")
-                       .attr("class","arcRel")
-                       .on("mouseover", function(d) {
-                         d3.select(this)
-                           .style("cursor", "pointer")
-                           .style("stroke-width", "3px")
-                           toolTip
-                            .transition()
-                            .duration(300)
-                            .style("opacity", "99")
-                            .style("display", "block")
-                    })
+  // bind data and append a group for each segment
+  var arcs = groupRel.selectAll('arc')
+                     .data(pie(religion))
+                     .enter()
+                     .append('g')
+                     .attr('class','arcRel')
+                     .on('mouseover', function(d) {
+                       d3.select(this)
+                         .style('cursor', 'pointer')
+                         .style('stroke-width', '3px')
+                         return(toolTip
+                          .transition()
+                          .duration(300)
+                          .style('opacity', '99')
+                          .style('display', 'block'))
+                     })
 
                     // locate tooltip
-                    .on("mousemove", function(d) {
+                    .on('mousemove', function(d) {
                        d3.select(this)
                        toolTip
                          .style('visibility', 'visible')
-                         .text(d.value + "%")
-                         .style("left", (d3.event.pageX - 60) + "px")
-                         .style("top", (d3.event.pageY - 40) + "px")
+                         .text(d.data + ': ' + d.value + '%')
+                         .style('left', (d3.event.pageX - 60) + 'px')
+                         .style('top', (d3.event.pageY - 40) + 'px')
                     })
 
-                    // remove tooltip and restore colour
-                    .on("mouseout", function(d, i) {
+                    // remove tooltip and restore color
+                    .on('mouseout', function(d, i) {
                        d3.select(this)
-                         .style("cursor", "normal")
-                         .style("stroke-width", "1px")
+                         .style('cursor', 'normal')
+                         .style('stroke-width', '1px')
                        toolTip
                            .transition()
                            .duration(300)
-                           .style("opacity", "100")
-                           .style("display", "none")
+                           .style('opacity', '100')
+                           .style('display', 'none')
                     })
+
                     // update scatterplot
-                    .on("click", function(d) {
-                      d3.select(".select").property("value", d.data)
+                    .on('click', function(d) {
+                      d3.select('#selectRel').property('value', d.data)
                       onchange(dataRel, dataPol)
                     })
 
-    // draw arcs
-    arcs.append("path")
-          .attr("d", arc)
-          .attr("fill", function(d, i) {return color[i]})
-          .attr("stroke", "black");
+  // draw arcs
+  arcs.append('path')
+        .attr('d', arc)
+        .attr('fill', function(d, i) {return color[i]})
+        .attr('stroke', 'black');
 
-    // create legend (1/2)
-      var ord = d3.scaleOrdinal()
-                  .domain(religion.slice(0,4))
-                  .range(color.slice(0,4));
+  // create legend (1/2)
+  var ord = d3.scaleOrdinal()
+              .domain(religion.slice(0,4))
+              .range(color.slice(0,4));
 
-      svg.append("g")
-         .attr("class", "legendOrdinal3")
-         .attr("transform", "translate(200,80)");
+  svg.append('g')
+      .attr('class', 'legendOrdinal3')
+      .attr('transform', 'translate(200,80)');
 
-      var legOrd = d3.legendColor()
-                     .shape("path", d3.symbol().type(d3.symbolCircle).size(120)())
-                     .shapePadding(10)
-                     .scale(ord);
+  var legOrd = d3.legendColor()
+                 .shape('path', d3.symbol().type(d3.symbolCircle).size(120)())
+                 .shapePadding(10)
+                 .scale(ord);
 
-      // draw legend
-      svg.select(".legendOrdinal3")
-          .call(legOrd)
+   // draw legend
+   svg.select('.legendOrdinal3')
+      .call(legOrd)
 
 
-      // create legend (2/2)
-      var ord = d3.scaleOrdinal()
-                  .domain(religion.slice(4,9))
-                  .range(color.slice(4,9));
+   // create legend (2/2)
+   var ord = d3.scaleOrdinal()
+               .domain(religion.slice(4,9))
+               .range(color.slice(4,9));
 
-      svg.append("g")
-         .attr("class", "legendOrdinal4")
-         .attr("transform", "translate(410,80)");
+   svg.append('g')
+      .attr('class', 'legendOrdinal4')
+      .attr('transform', 'translate(360,80)');
 
-      var legOrd = d3.legendColor()
-                     .shape("path", d3.symbol().type(d3.symbolCircle).size(120)())
-                     .shapePadding(10)
-                     .scale(ord);
+   var legOrd = d3.legendColor()
+                  .shape('path', d3.symbol().type(d3.symbolCircle).size(120)())
+                  .shapePadding(10)
+                  .scale(ord);
 
-      // draw legend
-      svg.select(".legendOrdinal4")
-          .call(legOrd)
+    // draw legend
+    svg.select('.legendOrdinal4')
+       .call(legOrd)
 };
 
 function updatePieRel(dataRel, munName) {
@@ -870,11 +865,11 @@ function updatePieRel(dataRel, munName) {
   */
 
   // update title
-  d3.select(".pieTitle1")
+  d3.select('.pieTitle1')
      .text(function () {
-       return "Religious affiliation in " + munName
+       return 'Religious affiliation in ' + munName
      })
-     .style("font-size", "18px")
+     .style('font-size', '18px')
 
   var selection = dataRel[munName];
   var religion = Object.keys(selection);
@@ -884,128 +879,130 @@ function updatePieRel(dataRel, munName) {
           .value(function(d) { return parseFloat(selection[d]) });
 
   // rescale segments
-  groupRel = d3.select(".group1");
-  groupRel = groupRel.selectAll("path")
+  groupRel = d3.select('.group1');
+  groupRel = groupRel.selectAll('path')
                      .data(pieHier(religion))
 
   groupRel.transition()
-          .attr("d", arc)
+          .attr('d', arc)
 
   // update the numbers bound to the arcs in tooltip
-  d3.selectAll(".arcRel")
+  d3.selectAll('.arcRel')
     .data(pieHier(religion))
 
-    // update tooltip
-    .on("mouseover", function(d) {
-        var percentage = d.value
-        return(toolTip.style('visibility', 'visible')
-                      .text(percentage + "%")
-                      .style("left", (d3.event.pageX - 60) + "px")
-                      .style("top", (d3.event.pageY - 40) + "px"))
-        })
+  // update tooltip
+  .on('mousemove', function(d) {
+      var percentage = d.value
+      return(toolTip.style('visibility', 'visible')
+                    .text(d.data + ': ' + percentage + '%')
+                    .style('left', (d3.event.pageX - 60) + 'px')
+                    .style('top', (d3.event.pageY - 40) + 'px'))
+  })
 }
 
 function createScatter(dataPol, dataRel, municipalityPol, parties, municipalityRel, church) {
-  /* Creates scatterplot showing all municipalities grouped based on the amount
-   * seats a party occupies and the percentage of people affliated to a religious
-   * group
- */
+    /* Creates scatterplot showing all municipalities grouped based on the amount
+    * seats a party occupies and the percentage of people affliated to a religious
+    * group
+    */
 
-  // set variables for svg
-  var width = 1200;
-  var height = 300;
+    // set variables for svg
+    var width = 800;
+    var height = 300;
 
-  // create svg
-  svg = d3.select("#scatterplot")
-              .append("svg")
-              .attr('width', width)
-              .attr('height', height)
+    // create svg
+    svg = d3.select('#scatterplot')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
 
-  // create title
-  svg.append("text")
-     .attr("x", (width / 2))
-     .attr("y", 15)
-     .attr("text-anchor", "middle")
-     .style("font-size", "18px")
-     .style("text-decoration", "bold")
-     .text("Scatterplot regarding political preference and religious affliation");
+    // create title
+    svg.append('text')
+       .attr('x', (width / 2))
+       .attr('y', 15)
+       .attr('text-anchor', 'middle')
+       .style('font-size', '18px')
+       .style('text-decoration', 'bold')
+       .text('Scatterplot regarding political preference and religious affliation');
 
-  // create dropdown menu (1/2)
-  var religion = ["Geen kerkelijke gezindte", "Rooms-katholiek", "Protestants", "Islam", "Joods", "Hindoe", "Boeddhist", "anders"];
+    // create dropdown menu (1/2)
+    var religion = ['Geen kerkelijke gezindte', 'Rooms-katholiek', 'Protestants', 'Islam', 'Joods', 'Hindoe', 'Boeddhist', 'anders'];
 
-  // make sure right data gets put trough
-  var select = d3.select('#scatterplot')
-                 .append('select')
-                 .attr('class','select')
-                 .on('change',function() {
-                   selectValueRel = d3.select('.select')
-                                      .property('value')
-                   selectValuePol = d3.select('.select2')
-                                      .property('value')
-                   onchange(dataRel, dataPol, selectValuePol, selectValueRel)
-                 });
+    // make sure right data gets put trough
+    var select = d3.select('#navBar')
+                   .append('select')
+                   .attr('id','selectRel')
+                   .attr('class', 'btn btn-outline-dark')
+                   .on('change', function() {
+                     selectValueRel = d3.select('#selectRel')
+                                        .property('value')
+                     selectValuePol = d3.select('#selectPol')
+                                        .property('value')
+                     onchange(dataRel, dataPol, selectValuePol, selectValueRel)
+                   });
 
-  var options = select
-                .selectAll('option')
-                .data(religion).enter()
-                .append('option')
-                .text(function (d) {
-                  return d;
-                });
+    var options = select
+                  .selectAll('option')
+                  .data(religion).enter()
+                  .append('option')
+                  .text(function (d) {
+                    return d;
+                  });
 
-  // create dropdown menu (2/2)
-  var polParty = ["CDA", "VVD", "GL", "CU", "SGP", "PVDA", "SP", "D66", "Lokaal", "Overig"];
+    // create dropdown menu (2/2)
+    var polParty = ['CDA', 'VVD', 'GL', 'CU', 'SGP', 'PVDA', 'SP', 'D66', 'Lokaal', 'Overig'];
 
-  // make sure right data gets put trough
-  var select = d3.select('#scatterplot')
-                 .append('select')
-                 .attr('class','select2')
-                 .on('change', function() {
-                   selectValueRel = d3.select('.select')
-                                      .property('value')
-                   selectValuePol = d3.select('.select2')
-                                      .property('value')
-                   onchange(dataRel, dataPol, selectValuePol, selectValueRel)
-                 });
+    // make sure right data gets put trough
+    var select = d3.select('#navBar')
+                   .append('select')
+                   .attr('id','selectPol')
+                   .attr('class', 'btn btn-outline-dark')
+                   .on('change', function() {
+                     selectValueRel = d3.select('#selectRel')
+                                        .property('value')
+                     selectValuePol = d3.select('#selectPol')
+                                        .property('value')
+                     onchange(dataRel, dataPol, selectValuePol, selectValueRel)
+                   });
 
-  var options = select
-                .selectAll('option')
-                .data(polParty).enter()
-                .append('option')
-                .text(function (d) {
-                  return d;
-                });
+    var options = select
+                  .selectAll('option')
+                  .data(polParty).enter()
+                  .append('option')
+                  .text(function (d) {
+                    return d;
+                  });
 
-  selectValueRel = d3.select('.select')
-                     .property('value')
-  selectValuePol = d3.select('.select2')
-                     .property('value')
+    selectValueRel = d3.select('#selectRel')
+                       .property('value')
+    selectValuePol = d3.select('#selectPol')
+                       .property('value')
 
-  // update plot
-  onchange(dataRel, dataPol, selectValuePol, selectValueRel)
+    // update plot
+    onchange(dataRel, dataPol, selectValuePol, selectValueRel)
 
-  // set points in plot
-  points = createPoints(dataRel, dataPol, selectValuePol, selectValueRel);
+    // set points in plot
+    points = createPoints(dataRel, dataPol, selectValuePol, selectValueRel);
 
-  // draw scales
-  setScale(points)
+    // draw scales
+    setScale(points)
 
-  // draw plot
-  makePlot(xScale, yScale, points)
+    // draw plot
+    makePlot(xScale, yScale, points, dataRel, dataPol)
 };
 
 function setScale(points) {
-  /* Set scales of scatterplot */
+   /* Set scales of scatterplot */
 
- // set scales
- window.xScale = d3.scaleLinear()
-                .domain([check(points, "x", "min"),
-                         check(points, "x", "max") + 0.5])
-                .range([65, 1150]);
- window.yScale = d3.scaleLinear()
-                .domain([check(points, "y", "min"),
-                         check(points, "y", "max") + 1])
-                .range([275, 30]);
+   // set scales
+   window.xScale = d3.scaleLinear()
+                  .domain([check(points, 'x', 'min'),
+                           check(points, 'x', 'max') + 0.5])
+                  .range([65, 780]);
+   window.yScale = d3.scaleLinear()
+                  .domain([check(points, 'y', 'min'),
+                           check(points, 'y', 'max') + 1])
+                  .range([275, 30]);
 };
 
 function check(dataSet, letter, stat) {
@@ -1019,7 +1016,7 @@ function check(dataSet, letter, stat) {
   };
 
   // find min and max of the array
-  if (stat === "max") {
+  if (stat === 'max') {
       return Math.max.apply(null, statistics);
   }
   else {
@@ -1028,86 +1025,121 @@ function check(dataSet, letter, stat) {
   };
 };
 
-function makePlot(xScale, yScale, points) {
+function makePlot(xScale, yScale, points, dataRel, dataPol) {
   /* Draw scatterplot */
 
   // set variables for svg
-  var width = 1200;
+  var width = 800;
   var height = 300;
 
   // create x axis ticks
-  svg.append("g")
-    .attr("class", "axis")
-    .attr("id", "axisX")
-    .attr("transform", "translate(0," + (280) + ")")
+  svg.append('g')
+    .attr('class', 'axis')
+    .attr('id', 'axisX')
+    .attr('transform', 'translate(0,' + (280) + ')')
     .call(d3.axisBottom(xScale));
 
   // create y axis ticks
-  svg.append("g")
-    .attr("class", "axis")
-    .attr("id", "axisY")
-    .attr("transform", "translate(" + 60 + ",0)")
+  svg.append('g')
+    .attr('class', 'axis')
+    .attr('id', 'axisY')
+    .attr('transform', 'translate(' + 60 + ',0)')
     .call(d3.axisLeft(yScale));
 
   // create y axis label
-  svg.append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 5)
-    .attr("x",0 - (height / 2))
-    .attr("dy", "1em")
-    .style("text-anchor", "middle")
-    .text("amount of seats")
-    .style("font-size", "10px")
+  svg.append('text')
+    .attr('transform', 'rotate(-90)')
+    .attr('y', 5)
+    .attr('x',0 - (height / 2))
+    .attr('dy', '1em')
+    .style('text-anchor', 'middle')
+    .text('amount of seats')
+    .style('font-size', '10px')
 
   // create x axis label
-  svg.append("text")
-      .attr("transform",
-            "translate("+[(width - 100) / 2 +
+  svg.append('text')
+      .attr('transform',
+            'translate('+[(width - 100) / 2 +
                            50,
-                           height]+")")
-      .style("text-anchor", "middle")
-      .text("percentage of religious affliation")
-      .style("font-size", "10px")
+                           height]+')')
+      .style('text-anchor', 'middle')
+      .text('percentage of religious affliation')
+      .style('font-size', '10px')
 
   // set circles to fill with points
-  var circles = svg.selectAll("circle")
+  var circles = svg.selectAll('circle')
                     .data(points)
                     .enter()
-                    .append("circle")
-                    .attr("cx", function(d, i) {
+                    .append('circle')
+                    .attr('cx', function(d, i) {
                           return xScale(d.x)
                     })
-                    .attr("cy", function(d, i) {
+                    .attr('cy', function(d, i) {
                         return yScale(d.y);
                     })
-                    .attr("r", 5)
-                    .attr("stroke-opacity", .5)
-                    .attr("stroke", "black")
-                    .attr("id", function(d) {
-                      return d.Gemeente
+                    .attr('r', 5)
+                    .attr('stroke-opacity', .5)
+                    .attr('stroke', 'black')
+                    .style('fill', 'blue')
+                    .attr('class', 'normal')
+
+                    // show name of municipality
+                    .on('mouseover', function(d) {
+                      d3.select(this)
+                        .style('cursor', 'pointer')
+                        .style('stroke-width', '3px')
+                        return(
+                           toolTip
+                            .transition()
+                            .duration(300)
+                            .style('opacity', '99')
+                            .style('display', 'block'))
                     })
-                    .style("fill", "blue")
-                    .attr("class", "normal");
+                    // set tooltip
+                    .on('mousemove', function(d) {
+                       return(toolTip
+                         .style('visibility', 'visible')
+                         .text(d.Gemeente)
+                         .style('left', (d3.event.pageX - 60) + 'px')
+                         .style('top', (d3.event.pageY - 40) + 'px'))
+                    })
+                    // update pie charts
+                    .on('click', function(d) {
+                      updatePiePol(dataPol, d.Gemeente)
+                      updatePieRel(dataRel, d.Gemeente)
+                    })
+                    // on mouseot, remove tooltip
+                    .on('mouseout', function(d, i) {
+                        d3.select(this)
+                          .style('cursor', 'normal')
+                          .style('stroke-width', '1px')
+                      return(
+                      toolTip
+                          .transition()
+                          .duration(300)
+                          .style('opacity', '100')
+                          .style('display', 'none'))
+                    })
 }
 
 function createPoints(rel, pol, part, kerk){
   /* Determines position of points in plot */
 
- points = []
+  points = []
 
- pols = Object.keys(pol);
- pols.forEach(function(p){
-   tempObj = {}
-   tempObj["Gemeente"] = p;
+  pols = Object.keys(pol);
+  pols.forEach(function(p){
+  tempObj = {}
+  tempObj['Gemeente'] = p;
 
-   // useless data and Nederland totaal out of list
-   if (rel[p] && pol[p][part] != null) {
-     if (rel[p][kerk] != "." && p != "Nederland totaal") {
-       tempObj["x"] = parseFloat(rel[p][kerk])
-       tempObj["y"] = pol[p][part]
-        points.push(tempObj)
+  // useless data and Nederland totaal out of list
+  if (rel[p] && pol[p][part] != null) {
+    if (rel[p][kerk] != '.' && p != 'Nederland totaal') {
+       tempObj['x'] = parseFloat(rel[p][kerk])
+       tempObj['y'] = pol[p][part]
+       points.push(tempObj)
     }
-   }
+  }
  })
  return points;
 }
@@ -1115,33 +1147,30 @@ function createPoints(rel, pol, part, kerk){
 function updateCircle(points) {
   /* Upon update; reposition circles */
 
-   svg.selectAll("circle")
-      .data(points)
-      .transition()
-      .attr("cx", function(d, i) {
+  svg.selectAll('circle')
+     .data(points)
+     .transition()
+     .attr('cx', function(d, i) {
             return xScale(d.x)
-      })
-      .attr("cy", function(d, i) {
+     })
+     .attr('cy', function(d, i) {
           return yScale(d.y);
-      })
-      .attr("r", 5)
-      .attr("stroke-opacity", .5)
-      .attr("stroke", "black")
-      .attr("id", function(d) {
-        return d.Gemeente
-      })
-      .style("fill", "blue")
-      .attr("class", "normal");
- }
+     })
+     .attr('r', 5)
+     .attr('stroke-opacity', .5)
+     .attr('stroke', 'black')
+     .style('fill', 'blue')
+     .attr('class', 'normal')
+}
 
 function updateAxis(points) {
   /* Upon update, either out of pie charts of out of dropdown; rescale axes */
 
-  svg.select("#axisY")
+  svg.select('#axisY')
      .transition()
      .call(d3.axisLeft(yScale));
 
-  svg.select("#axisX")
+  svg.select('#axisX')
      .transition()
      .call(d3.axisBottom(xScale))
 }
@@ -1149,10 +1178,10 @@ function updateAxis(points) {
 function onchange(dataRel, dataPol) {
   /* Upon update; draw plot based on new values */
 
-   var selectValueRel = d3.select('.select')
-                          .property('value')
-   var selectValuePol = d3.select('.select2')
-                          .property('value')
+  var selectValueRel = d3.select('#selectRel')
+                         .property('value')
+  var selectValuePol = d3.select('#selectPol')
+                         .property('value')
 
   // set points in plot
   points = createPoints(dataRel, dataPol, selectValuePol, selectValueRel);

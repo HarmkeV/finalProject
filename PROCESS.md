@@ -56,3 +56,13 @@
 # Day 11
 * Updated tooltip piePol, pieRel dit not work,
 * Tried arranging svg's differently, not enough space to place pie charts next to each other.
+
+# Day 12
+* Both pie tooltips update correctly,
+* Added tooltip to scatterplot, on hovering the name of the municipality is displayed,
+* Pie charts update out of points in scatterplot,
+* Added nav bar, not yet working properly.
+
+# Day 13
+* Styled navigation bar,
+* Went trough code looking for unnecessary code.

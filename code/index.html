@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<!--
+Name: Harmke Vliek
+Studentnumber: 10989137
+Subject: Programmeerproject
+-->
+
+<html>
+  <meta charset="utf-8" />
+    <title>
+        Religie en politieke voorkeur
+    </title>
+      <head>
+
+        <meta charset="utf-8">
+        <title>Religie en Politieke overtuiging</title>
+
+        <!-- D3 -->
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+
+        <!-- D3 legend -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+
+        <!-- main javascript for visualisation -->
+        <script type="text/javascript" src="visual.js"></script>
+
+        <!-- map -->
+        <script src="highcode.js"></script>
+        <script src="mapexp.js"></script>
+        <script src="mapnl.js"></script>
+
+        <!-- bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- style -->
+        <link rel="stylesheet" type="text/css" href="style.css">
+
+        <!-- favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+      </head>
+      <body>
+
+        <!-- nav bar example from: https://www.bootply.com/AAcC6rXv4R -->
+        <div class="navbar navbar-inverse" id="navBar">
+          <a class="navbar-brand">Politics and religion</a>
+          <ul class="nav navbar-nav" id="navBarList">
+            <li><span class="white">Name: Harmke Vliek<br>Student number: 10989137</span></li>
+            <li>
+              <a href="https://www.cbs.nl/nl-nl/nieuws/2016/51/helft-nederlanders-is-kerkelijk-of-religieus">
+                 Kerkelijke gezindte (CBS 2015)
+              </a>
+            </li>
+            <li>
+              <a href="https://www.verkiezingsuitslagen.nl/verkiezingen/detail/GR20180321/671509">
+                 Uitslag gemeenteraadsverkiezingen (AD 2018)
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- divs to load visualisations in -->
+        <div id="map" style="width:30%; height:550px;"></div>
+        <div id="piechart" style="width:35%; height:250px;"></div>
+        <div id="scatter" style="width:34%; height:250px;"></div>
+        <div id="scatterplot" style="width:69%; height:330px;"></div>
+
+      </body>
+</html>

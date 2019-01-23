@@ -4,7 +4,8 @@ Harmke Vliek
 CSS for Programmeerproject
 */
 
-html * {
+/* style for overall page */
+html {
   font-family: sans-serif;
   background-color: lightGray;
 }
@@ -18,6 +19,7 @@ p {
   font-size: 10px;
 };
 
+/* style for map */
 .loading {
     margin-top: 10em;
     text-align: center;
@@ -35,6 +37,7 @@ p {
   stroke: #000;
 }
 
+/* style for tooltip */
 .tooltip {
   position: absolute;
   width: 200px;
@@ -45,7 +48,7 @@ p {
 .tooltip {
   position:absolute;
   text-align: center;
-  width: 100px;
+  width: 155px;
   height:auto;
   background-color: #FFFFFF;
   border-radius: 3px;
@@ -58,31 +61,28 @@ p {
     display: block;
 }
 
-.tooltipsecond {
-  position: absolute;
-  width: 200px;
-  height: 28px;
-  pointer-events: none;
-}
-
-.tooltipsecond {
-  position:absolute;
-  text-align: center;
-  width: 80px;
-  height:auto;
-  background-color: #FFFFFF;
-  border-radius: 3px;
-  color: black;
-  padding: 2px;
-  z-index:3;
-}
-
-.tooltipsecond span {
-    display: block;
-}
-
 select {
   background-color: white;
+}
+
+/* style for navbar */
+span {
+  color: white;
+  text-align: center;
+}
+
+.white {
+  position: initial;
+  margin-top: 20px;
+}
+
+/* indicate placement for all the divs */
+#navbar {
+  width: 100%;
+  position: fixed;
+  border-radius: 0;
+  height: 50px;
+  z-index: 9999;
 }
 
 #map {
