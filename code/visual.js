@@ -487,7 +487,7 @@ function createMap(data, municipality, church, dataPol) {
   var map = Highcharts.mapChart('map', {
               chart: {
                   map: 'countries/nl/nl-all-all',
-                  backgroundColor: '#D3D3D3'
+                  backgroundColor: '#f6f6f6'
               },
               title: {
                   text: 'Secularization in the Netherlands'
@@ -552,7 +552,6 @@ function createPiePol(dataPol, municipality, parties, dataRel) {
               .append('svg')
               .attr('width', width)
               .attr('height', height)
-              .style('background', '#D3D3D3')
 
   var group = svg.append('g')
                  .attr('transform', 'translate(100,120)')
@@ -560,7 +559,7 @@ function createPiePol(dataPol, municipality, parties, dataRel) {
 
    // insert a title
    svg.append('text')
-      .attr('transform', 'translate(60,25)')
+      .attr('transform', 'translate(20,25)')
       .attr('class', 'pieTitle')
       .text(function () {
         return 'Distribution of seats in ' + beginSet;
@@ -574,7 +573,7 @@ function drawPiePol(svg, group, dataRel, dataPol, selection, parties) {
   /* Draws pie chart containing information pertaining distibution of seats in council */
 
   var radius = 80;
-  var color = ['#a50026','#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
+  var color = ['#e0f3f8','#abd9e9','#74add1','#4575b4','#313695','#25274d','#464866','#aaabb8','#2e9cca','#29648a'];
 
   // set arc
   arc = d3.arc()
@@ -644,7 +643,7 @@ function drawPiePol(svg, group, dataRel, dataPol, selection, parties) {
 
    svg.append('g')
       .attr('class', 'legendOrdinal')
-      .attr('transform', 'translate(200,65)');
+      .attr('transform', 'translate(200,75)');
 
    var legOrd = d3.legendColor()
                   .shape('path', d3.symbol().type(d3.symbolCircle).size(120)())
@@ -663,7 +662,7 @@ function drawPiePol(svg, group, dataRel, dataPol, selection, parties) {
 
    svg.append('g')
       .attr('class', 'legendOrdinal2')
-      .attr('transform', 'translate(270,65)');
+      .attr('transform', 'translate(270,75)');
 
    var legOrd = d3.legendColor()
                   .shape('path', d3.symbol().type(d3.symbolCircle).size(120)())
@@ -759,7 +758,7 @@ function drawPieRel (svg, groupRel, dataRel, dataPol, selection, religion) {
 
   // set variables
   var radius = 80;
-  var color = ['#b35806','#e08214','#fdb863','#fee0b6','#d8daeb','#b2abd2','#8073ac','#542788'];
+  var color = ['#41b6c4','#1d91c0','#225ea8','#0c2c84', '#ffffd9','#edf8b1','#c7e9b4','#7fcdbb'];
 
   // create arc
   arc = d3.arc()
@@ -908,7 +907,7 @@ function createScatter(dataPol, dataRel, municipalityPol, parties, municipalityR
 
     // set variables for svg
     var width = 800;
-    var height = 300;
+    var height = 320;
 
     // create svg
     svg = d3.select('#scatterplot')
@@ -918,7 +917,7 @@ function createScatter(dataPol, dataRel, municipalityPol, parties, municipalityR
 
     // create title
     svg.append('text')
-       .attr('x', (width / 2))
+       .attr('x', 260)
        .attr('y', 15)
        .attr('text-anchor', 'middle')
        .style('font-size', '18px')
@@ -996,13 +995,13 @@ function setScale(points) {
 
    // set scales
    window.xScale = d3.scaleLinear()
-                  .domain([check(points, 'x', 'min'),
-                           check(points, 'x', 'max') + 0.5])
-                  .range([65, 780]);
+                  .domain([check(points, 'x', 'min') - 1,
+                           check(points, 'x', 'max') + 1])
+                  .range([30, 780]);
    window.yScale = d3.scaleLinear()
-                  .domain([check(points, 'y', 'min'),
+                  .domain([check(points, 'y', 'min') - 0.1,
                            check(points, 'y', 'max') + 1])
-                  .range([275, 30]);
+                  .range([280, 30]);
 };
 
 function check(dataSet, letter, stat) {
@@ -1043,13 +1042,13 @@ function makePlot(xScale, yScale, points, dataRel, dataPol) {
   svg.append('g')
     .attr('class', 'axis')
     .attr('id', 'axisY')
-    .attr('transform', 'translate(' + 60 + ',0)')
+    .attr('transform', 'translate(' + 30 + ',0)')
     .call(d3.axisLeft(yScale));
 
   // create y axis label
   svg.append('text')
     .attr('transform', 'rotate(-90)')
-    .attr('y', 5)
+    .attr('y', 1)
     .attr('x',0 - (height / 2))
     .attr('dy', '1em')
     .style('text-anchor', 'middle')
@@ -1061,7 +1060,7 @@ function makePlot(xScale, yScale, points, dataRel, dataPol) {
       .attr('transform',
             'translate('+[(width - 100) / 2 +
                            50,
-                           height]+')')
+                           height + 5]+')')
       .style('text-anchor', 'middle')
       .text('percentage of religious affliation')
       .style('font-size', '10px')
@@ -1080,7 +1079,7 @@ function makePlot(xScale, yScale, points, dataRel, dataPol) {
                     .attr('r', 5)
                     .attr('stroke-opacity', .5)
                     .attr('stroke', 'black')
-                    .style('fill', 'blue')
+                    .style('fill', '#7395ae')
                     .attr('class', 'normal')
 
                     // show name of municipality
@@ -1159,7 +1158,7 @@ function updateCircle(points) {
      .attr('r', 5)
      .attr('stroke-opacity', .5)
      .attr('stroke', 'black')
-     .style('fill', 'blue')
+     .style('fill', '#7395ae')
      .attr('class', 'normal')
 }
 

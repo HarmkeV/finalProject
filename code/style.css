@@ -7,7 +7,7 @@ CSS for Programmeerproject
 /* style for overall page */
 html {
   font-family: sans-serif;
-  background-color: lightGray;
+  background-color: #f6f6f6;
 }
 
 h2 {
@@ -66,14 +66,29 @@ select {
 }
 
 /* style for navbar */
-span {
+.linkRel {
   color: white;
-  text-align: center;
+}
+
+.linkPol {
+  color: white;
 }
 
 .white {
+  color: white;
   position: initial;
-  margin-top: 20px;
+  margin-top: 5px;
+}
+
+.btn {
+  position: initial;
+  display: inline-block;
+  text-align: center;
+  margin-top: 10px;
+}
+
+#selectRel {
+  margin-left: 60px;
 }
 
 /* indicate placement for all the divs */

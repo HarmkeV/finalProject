@@ -65,4 +65,5 @@
 
 # Day 13
 * Styled navigation bar,
-* Went trough code looking for unnecessary code.
+* Went trough code looking for unnecessary code,
+* Relocated files in the git to be more logical.
