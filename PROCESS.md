@@ -70,10 +70,13 @@
 
 # Day 14
 * Decided to color the pages in shades of blue as I find it aesthetically pleasing,
-* Cleaned code.
+* Cleaned code and added semicolons.
 
 # Day 15
 * Cleaned code,
 * Updated placement of visualisations on the page,
 * Changed all titles, descriptions and labels to Dutch as all data is in Dutch and mixing both Dutch and English is ugly,
-* Updated tooltip in case of NaN seats; instead of 'NaN seats' it states 'no data'.
+* Updated tooltip in case of NaN seats; instead of 'NaN seats' it states 'no data',
+* Added all files described in the requirements on the website,
+* Started creating new README.md,
+* Decided a gitignore is not necessary as there is no cache when writing in JavaScript. 
