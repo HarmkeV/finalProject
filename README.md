@@ -8,8 +8,8 @@ This visualisation tries to offer an answer to the question regarding the correl
 
 # User guide
 Upon opening the page, the screen displays visualisations of the data of the Netherlands as a whole.
-[First entry](doc/screenNLtotaal.png) Upon clicking on a municipality in the map, the pie charts update according to the data associated with the municipality. This happens as well upon clicking on a circle in the scatterplot.
-[update](doc/screenLochem.png)
+![First entry](doc/screenNLtotaal.png) Upon clicking on a municipality in the map, the pie charts update according to the data associated with the municipality. This happens as well upon clicking on a circle in the scatterplot.
+![update](doc/screenLochem.png)
 The scatterplot updates according to both the dropdown menu in the navigation bar on top of the page, as well as upon clicking the slice in the pie charts that corresponds to a political party or a religion.
 The links to the data sources are located in the navigation bar.
 
