@@ -67,3 +67,13 @@
 * Styled navigation bar,
 * Went trough code looking for unnecessary code,
 * Relocated files in the git to be more logical.
+
+# Day 14
+* Decided to color the pages in shades of blue as I find it aesthetically pleasing,
+* Cleaned code.
+
+# Day 15
+* Cleaned code,
+* Updated placement of visualisations on the page,
+* Changed all titles, descriptions and labels to Dutch as all data is in Dutch and mixing both Dutch and English is ugly,
+* Updated tooltip in case of NaN seats; instead of 'NaN seats' it states 'no data'.
