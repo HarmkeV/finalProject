@@ -8,11 +8,11 @@
 
 **Problem statement**
 
-The number of people who go to church or identify as a member of a religion has decreased in the last century. This decrease strated when the pillarification (also known as 'verzuiling') of the Dutch society ended and people of different religions started to mingle. The end of the era of pillarifiction is characterized by the origin of several political parties, of which some weren't linked to a certain creed. The rate with which secularization exists has increased in recent years. In the history of the world, the amount of people without faith has never been this high. Simultaneously, the amount of political parties is Dutch society has increased, most of them not religous. While his has been happening simultaneously, the possible correlation of these two facts is not being thought at shools. Does secularization lead to the decrease of religious political parties and the amount of votes they recieve, or is there no cohesion at all?    
+The number of people who go to church or identify as a member of a religion has decreased in the last century. This decrease started when the pillarification (also known as 'verzuiling') of the Dutch society ended and people of different religions started to mingle. The end of the era of pillarifiction is characterized by the origin of several political parties, of which some weren't linked to a certain creed. The rate with which secularization exists has increased in recent years. In the history of the world, the amount of people without faith has never been this high. Simultaneously, the amount of political parties is Dutch society has increased, most of them not religious. While his has been happening simultaneously, the possible correlation of these two facts is not being thought at schools. Does secularization lead to the decrease of religious political parties and the amount of votes they receive, or is there no cohesion at all?    
 
 **Solution**
 
-The visualisation of the solution will be a map of the municipalities of the Netherlands displaying the biggest political party in the municipality. When one clicks on a province, a pie chart regarding the distribution of seats in council and a pie chart regarding the percentage of people who identify as a follower of a religion will appear. Finally, a scatterplot will be displayed rendering the amount of seats of a political party in council and the perctages of religious faith. 
+The visualisation of the solution will be a map of the municipalities of the Netherlands displaying the biggest political party in the municipality. When one clicks on a province, a pie chart regarding the distribution of seats in council and a pie chart regarding the percentage of people who identify as a follower of a religion will appear. Finally, a scatterplot will be displayed rendering the amount of seats of a political party in council and the perctages of religious faith.
 
 ![Example visualisation](/doc/proposal_voorbeeld.png)
 
@@ -22,7 +22,7 @@ The visualisation of the solution will be a map of the municipalities of the Net
 
 The datasource containing information regarding religion is the file 'Kerkelijke gezindte en kerkbezoek naar gemeenten' on this website of the CBS: https://www.cbs.nl/nl-nl/nieuws/2016/51/helft-nederlanders-is-kerkelijk-of-religieus. This file contains the amount of time an resident of the municipality visits a religious building and the distribution of religous beliefs in the municipality. The preprossing of this file will result in the distribution of creed per municipality in a json file.
 
-The datasource containing information regarding voting behaviour is obtained from https://www.verkiezingsuitslagen.nl/. 
+The datasource containing information regarding voting behaviour is obtained from https://www.verkiezingsuitslagen.nl/.
 
 *external components*
 
