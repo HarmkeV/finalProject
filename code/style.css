@@ -40,6 +40,24 @@ h3 {
   margin-left: 850px;
 }
 
+.text {
+  width: 30%;
+  position: absolute;
+  left: 1%;
+}
+
+.guide {
+  width: 30%;
+  position: absolute;
+  left: 33%
+}
+
+.sources {
+  width: 30%;
+  position: absolute;
+  left: 67%;
+}
+
 /* style for map */
 .loading {
     margin-top: 10em;

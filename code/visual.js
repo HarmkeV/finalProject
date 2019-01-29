@@ -501,6 +501,16 @@ function createMap(data, municipality, church, dataPol) {
             });
 }
 
+function arcTween(a) {
+  /* Ensure segments are rescaled smoothly in pie charts */
+
+  var trans = d3.interpolate(this._current, a);
+  this._current = trans(0);
+  return function(e) {
+    return arc(trans(e));
+  };
+}
+
 function createPiePol(dataPol, municipality, parties, dataRel) {
   /* Shows pie chart of data of Nederland totaal
    *  chart source: https://codepen.io/alexmorgan/pen/XXzpZP.
@@ -679,7 +689,8 @@ function updatePiePol(dataPol, munName) {
                .data(piePol(parties));
 
   group.transition()
-       .attr('d', arc);
+         .duration(200)
+         .attrTween("d", arcTween);
 
   // update tooltip
   d3.selectAll('.arc')
@@ -864,21 +875,22 @@ function updatePieRel(dataRel, munName) {
   var selection = dataRel[munName];
   var religion = Object.keys(selection);
 
-  pieHier = d3.pie()
-          .padAngle(.05)
-          .value(function(d) {
-            return parseFloat(selection[d]);
-          });
+  var pieHier = d3.pie()
+                  .padAngle(.05)
+                  .value(function(d) {
+                    return parseFloat(selection[d]);
+                  });
 
   // rescale segments
-  groupRel = d3.select('.groupRel')
-  groupRel = groupRel.selectAll('path')
-                     .data(pieHier(religion))
+  var groupRel = d3.select('.groupRel')
+  var groupRel = groupRel.selectAll('path')
+                         .data(pieHier(religion))
 
   groupRel.transition()
-          .attr('d', arc);
+            .duration(200)
+            .attrTween("d", arcTween);
 
-  // update the numbers bound to the arcs in tooltip
+  // update the numbers bound to the arcs
   d3.selectAll('.arcRel')
     .data(pieHier(religion))
 
@@ -916,15 +928,6 @@ function createScatter(dataPol, dataRel, municipalityPol, parties, municipalityR
             .append('svg')
             .attr('width', width)
             .attr('height', height);
-
-    // create title
-    svg.append('text')
-       .attr('x', 260)
-       .attr('y', 15)
-       .attr('text-anchor', 'middle')
-       .style('font-size', '18px')
-       .style('text-decoration', 'bold')
-       .text('Scatterplot met betrekking tot religieuze en politieke voorkeur');
 
     // create dropdown menu (1/2)
     var religion = ['Geen kerkelijke gezindte', 'Rooms-katholiek', 'Protestants', 'Islam', 'Joods', 'Hindoe', 'Boeddhist', 'anders'];
@@ -978,6 +981,15 @@ function createScatter(dataPol, dataRel, municipalityPol, parties, municipalityR
                        .property('value');
     selectValuePol = d3.select('#selectPol')
                        .property('value');
+
+   // create title
+   svg.append('text')
+      .attr('x', 10)
+      .attr('y', 15)
+      .attr('text-anchor', 'left')
+      .style('font-size', '18px')
+      .style('text-decoration', 'bold')
+      .text('Scatterplot met betrekking tot religieuze en politieke voorkeur');
 
     // update plot
     onchange(dataRel, dataPol, selectValuePol, selectValueRel);
@@ -1050,7 +1062,7 @@ function makePlot(xScale, yScale, points, dataRel, dataPol) {
   // create y axis label
   svg.append('text')
     .attr('transform', 'rotate(-90)')
-    .attr('y', 1)
+    .attr('y', 0)
     .attr('x',0 - (height / 2))
     .attr('dy', '1em')
     .style('text-anchor', 'middle')

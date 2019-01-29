@@ -1,7 +1,7 @@
 # Project
 Final project of the minor Programmeren. Visualisations created by Harmke Vliek.
 
-link to[Project](https://harmkev.github.io/finalProject/code/)
+link to [Project](https://harmkev.github.io/finalProject/code/)
 
 # Purpose
 The number of people who go to church or identify as a member of a religion has decreased in the last century. This decrease started when the pillarification (also known as 'verzuiling') of the Dutch society ended and people of different religions started to mingle. The end of the era of pillarifiction is characterized by the origin of several political parties, of which some weren't linked to a certain creed. The rate with which secularization exists has increased in recent years. In the history of the world, the amount of people without faith has never been this high. Simultaneously, the amount of political parties is Dutch society has increased, most of them not religious. While his has been happening simultaneously, the possible correlation of these two facts is not being thought at schools.
@@ -11,7 +11,7 @@ This visualisation tries to offer an answer to the question regarding the correl
 # User guide
 Upon opening the page, the screen displays visualisations of the data of the Netherlands as a whole.
 
-![First entry](doc/screenNLtotaal.png) 
+![First entry](doc/screenNLtotaal.png)
 
 Upon clicking on a municipality in the map, the pie charts update according to the data associated with the municipality. This happens as well upon clicking on a circle in the scatterplot.
 
