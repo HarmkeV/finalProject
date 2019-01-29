@@ -89,4 +89,5 @@
   colours and all other style for text will be in the css file,
 * Decided style for circles in scatterplot will be determined in the css file, as I would like to colour them according to whether it has been clicked on or not. This has not been done yet,
 * Fixed buggy toolTip,
-* Added about page.
+* Added about page,
+* Decided to wet code both pie charts and legends, as I think they are sufficiently distinct and it is more clear this way.
