@@ -4,7 +4,8 @@ This map exists of several files, some of them for code and other files on which
 The files containing code are CONVERT2JSON.py, style.css, index.html and visual.js
 * [CONVERT2JSON.py](CONVERT2JSON.py) converts the csv file [kerkelijke_gezindte_en_kerkbezoek_naar_gemeenten.csv](kerkelijke_gezindte_en_kerkbezoek_naar_gemeenten.csv) to [religie.json](religie.json).
 * The file [style.css](style.css) contains all CSS for the webpage and the figures on the page.
-* The file [index.html](index.html) is the html file based on which the server launches the page.
+* The file [index.html](index.html) is the html file based on which the server launches the page with visualisations.
+* The file [about.html](about.html) is the html file based on which the server launches the page with the description of the project.
 * The file [visual.js](visual.js) contains the code necessary to create all figures on the page.
 
 # Data

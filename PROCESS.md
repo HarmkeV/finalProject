@@ -79,4 +79,14 @@
 * Updated tooltip in case of NaN seats; instead of 'NaN seats' it states 'no data',
 * Added all files described in the requirements on the website,
 * Started creating new README.md,
-* Decided a gitignore is not necessary as there is no cache when writing in JavaScript. 
+* Decided a gitignore is not necessary as there is no cache similar to a py-cache when writing in my JavaScript file,
+* Tooltip fails upon 'no data' by religion.
+
+# Day 16
+* Cleaned code,
+* Decided I would use pixel values in all transform, translate functions, as it enables precise locating of titles etc,
+* Decided font-size will be determined in a .style in the JavaScript as it has to be different for all titles,
+  colours and all other style for text will be in the css file,
+* Decided style for circles in scatterplot will be determined in the css file, as I would like to colour them according to whether it has been clicked on or not. This has not been done yet,
+* Fixed buggy toolTip,
+* Added about page.

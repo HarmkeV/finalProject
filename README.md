@@ -24,7 +24,10 @@ The git contains a map called code, a map called doc and several markdown files.
 The map doc contains all images displayed in the several markdown files. The map code contains the JavaScript file [visual.js](code/visual.js), in which all code necessary for rendering the visualisations is set, as well as the [html page](code/index.html) necessary to display a webpage. Therewithal the favicon, [css file](code/style.css) and the [conversion file](code/CONVERT2JSON.py) is set in there. All data is stored in the map data.
 
 # Sources of external code
-The svg of the Netherlands is obtained from [Highcharts](http://code.highcharts.com/mapdata/countries/no/no-all-all.js). The legend is made using the library D3 legend. The style of the page is enhanced by [bootstrap](https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css). Both pie charts are created based on this [example](https://codepen.io/alexmorgan/pen/XXzpZP).
+* The svg of the Netherlands is obtained from [Highcharts](http://code.highcharts.com/mapdata/countries/no/no-all-all.js).
+* The legend is made using the library D3 legend.
+* The style of the page is enhanced by [bootstrap](https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css).
+* Both pie charts are created based on this [example](https://codepen.io/alexmorgan/pen/XXzpZP).
 
 # License
 This project is licensed under a public release license - see the LICENSE.md file for details.

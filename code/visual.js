@@ -462,8 +462,8 @@ function createMap(data, municipality, church, dataPol) {
   // Create chart regarding
   var map = Highcharts.mapChart('map', {
               chart: {
+                  // show map
                   map: 'countries/nl/nl-all-all',
-                  backgroundColor: '#f6f6f6'
               },
               title: {
                   text: 'Secularisatie in Nederland'
@@ -489,6 +489,7 @@ function createMap(data, municipality, church, dataPol) {
                           color: '#BADA55'
                       }
                   },
+                  // update pie charts
                   events: {
                     click: function (e) {
                       var munName = e.point.name;
@@ -696,7 +697,7 @@ function updatePiePol(dataPol, munName) {
       }
       else {
         return(toolTip.style('visibility', 'visible')
-                    .text(d.data + ': ' + zetels + ' seats')
+                    .text(d.data + ': ' + seats + ' zetels')
                     .style('left', (d3.event.pageX - 60) + 'px')
                     .style('top', (d3.event.pageY - 40) + 'px'))
         }
@@ -720,19 +721,19 @@ function createPieRel(dataRel, municipalityRel, church, dataPol) {
    var religion = Object.keys(selection);
 
    // create svg
-   var svg = d3.select('#scatter')
+   var svg = d3.select('#pieRel')
                .append('svg')
                .attr('width', width)
                .attr('height', height);
 
    groupRel = svg.append('g')
                  .attr('transform', 'translate(100,120)')
-                 .attr('class', 'group1');
+                 .attr('class', 'groupRel');
 
    // insert a title
    svg.append('text')
       .attr('transform', 'translate(60,25)')
-      .attr('class', 'pieTitle1')
+      .attr('class', 'pieTitleRel')
       .text(function () {
         return 'Kerkelijke gezindte in ' + beginSet;
       })
@@ -854,7 +855,7 @@ function updatePieRel(dataRel, munName) {
   */
 
   // update title
-  d3.select('.pieTitle1')
+  d3.select('.pieTitleRel')
      .text(function () {
        return 'Kerkelijke gezindte in ' + munName;
      })
@@ -870,7 +871,7 @@ function updatePieRel(dataRel, munName) {
           });
 
   // rescale segments
-  groupRel = d3.select('.group1')
+  groupRel = d3.select('.groupRel')
   groupRel = groupRel.selectAll('path')
                      .data(pieHier(religion))
 
@@ -1063,7 +1064,7 @@ function makePlot(xScale, yScale, points, dataRel, dataPol) {
                            50,
                            height + 5]+')')
       .style('text-anchor', 'middle')
-      .text('percentage van kerkelijke gezindte')
+      .text('percentage kerkelijke gezindte')
       .style('font-size', '10px');
 
   // set circles to fill with points
@@ -1080,7 +1081,6 @@ function makePlot(xScale, yScale, points, dataRel, dataPol) {
                     .attr('r', 5)
                     .attr('stroke-opacity', .5)
                     .attr('stroke', 'black')
-                    .style('fill', '#7395ae')
                     .attr('class', 'normal')
 
                     // show name of municipality
@@ -1107,6 +1107,14 @@ function makePlot(xScale, yScale, points, dataRel, dataPol) {
                     .on('click', function(d) {
                       updatePiePol(dataPol, d.Gemeente);
                       updatePieRel(dataRel, d.Gemeente);
+
+                      // change color of circle back to normal colour
+                      d3.select('.clicked')
+                        .attr('class', 'normal')
+
+                      // change colour of circle
+                      d3.select(this)
+                        .attr('class', 'clicked')
                     })
                     // on mouseot, remove tooltip
                     .on('mouseout', function(d, i) {
@@ -1159,7 +1167,6 @@ function updateCircle(points) {
      .attr('r', 5)
      .attr('stroke-opacity', .5)
      .attr('stroke', 'black')
-     .style('fill', '#7395ae')
      .attr('class', 'normal');
 }
 
