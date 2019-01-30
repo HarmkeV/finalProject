@@ -95,4 +95,5 @@
 
 # Day 17
 * Weird municipalities in Friesland, pie chart religion could not update so I set a no data title instead,
+* Wrote README.md,
 * Went trough code again.

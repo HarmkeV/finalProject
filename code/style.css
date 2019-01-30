@@ -76,6 +76,14 @@ h3 {
   stroke: #000;
 }
 
+text.highcharts-credits {
+  visibility: hidden;
+}
+
+path.highcharts-button-symbol {
+  visibility: hidden;
+}
+
 /* style for tooltip */
 .tooltip {
   position: absolute;
@@ -135,8 +143,13 @@ select {
   margin-top: 10px;
 }
 
+#idNav {
+  margin-left: 10px;
+  margin-right: 15px;
+}
+
 #selectRel {
-  margin-left: 60px;
+  margin-left: 50px;
 }
 
 /* indicate placement for all the divs */
