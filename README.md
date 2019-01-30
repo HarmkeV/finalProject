@@ -34,9 +34,9 @@ Upon clicking on a municipality in the map, the pie charts update according to t
 
 This happens as well upon clicking on a circle in the scatterplot. This circle will then turn orange, to indicate that it is selected. As the map has been created before the municipal reclassification, some municipalities do not have data or do not exist anymore. This in indicated trough the title of the plot and an empty pie chart.
 
-![Non-existent municipality](doc/screenGeenGem.png)
+![Non-existent municipality](doc/ScreenGeenGem.png)
 
-![No data](doc/ScreenNoData.png)
+![No data](doc/screenNoData.png)
 
 The scatterplot updates according to both the dropdown menu in the navigation bar on top of the page, as well as upon clicking the slice in the pie charts that corresponds to a political party or a religion.
 The links to the data sources are located in the navigation bar.
