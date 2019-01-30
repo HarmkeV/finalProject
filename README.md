@@ -36,7 +36,7 @@ This happens as well upon clicking on a circle in the scatterplot. This circle w
 
 ![Non-existent municipality](doc/screenGeenGem.png)
 
-![No data](doc/screenNoData.png)
+![No data](doc/ScreenNoData.png)
 
 The scatterplot updates according to both the dropdown menu in the navigation bar on top of the page, as well as upon clicking the slice in the pie charts that corresponds to a political party or a religion.
 The links to the data sources are located in the navigation bar.
