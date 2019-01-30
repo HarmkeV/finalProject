@@ -502,7 +502,9 @@ function createMap(data, municipality, church, dataPol) {
 }
 
 function arcTween(a) {
-  /* Ensure segments are rescaled smoothly in pie charts */
+  /* Ensure segments are rescaled smoothly in pie charts
+   * Based on https://bl.ocks.org/mbostock/3916621
+  */
 
   var trans = d3.interpolate(this._current, a);
   this._current = trans(0);
@@ -667,52 +669,69 @@ function updatePiePol(dataPol, munName) {
    *in council upon clicking on the map
   */
 
-  // update title
-  d3.select('.pieTitle')
-     .text(function () {
-       return 'Zetelverdeling in '  + munName;
-     })
-     .style('font-size', '18px');
+  // municipality does not exist anymore or is some weird municipality in Friesland
+  if (dataPol[munName] === undefined) {
+    // update title
+    d3.select('.pieTitle')
+       .text(function () {
+         return 'gemeente bestaat niet meer na herindeling';
+       })
+       .style('font-size', '18px');
 
-  var selection = dataPol[munName];
-  var parties = Object.keys(selection);
+    // hide pie chart
+    d3.select('.group')
+      .style('visibility', 'hidden');
+  }
+  // in case of existing municipality, show pie chart
+  else {
+    // update title
+    d3.select('.pieTitle')
+       .text(function () {
+         return 'Zetelverdeling in '  + munName;
+       })
+       .style('font-size', '18px');
 
-  piePol = d3.pie()
-          .padAngle(.05)
-          .value(function(d) {
-            return parseFloat(selection[d]);
-          });
+    var selection = dataPol[munName];
+    var parties = Object.keys(selection);
 
-  // rescale segments
-  group = d3.select('.group');
-  group = group.selectAll('path')
-               .data(piePol(parties));
+    piePol = d3.pie()
+            .padAngle(.05)
+            .value(function(d) {
+              return parseFloat(selection[d]);
+            });
 
-  group.transition()
-         .duration(200)
-         .attrTween("d", arcTween);
+    // rescale segments
+    group = d3.select('.group')
+              .style('visibility', 'visible');
+    group = group.selectAll('path')
+                 .data(piePol(parties));
 
-  // update tooltip
-  d3.selectAll('.arc')
-    .data(piePol(parties))
+    group.transition()
+           .duration(200)
+           .attrTween("d", arcTween);
 
-  // update tooltip
-  .on('mousemove', function(d) {
-      var seats = d.value
-      // check whether data is present
-      if (isNaN(seats)) {
-        return(toolTip.style('visibility', 'visible')
-                    .text('geen data beschikbaar')
-                    .style('left', (d3.event.pageX - 60) + 'px')
-                    .style('top', (d3.event.pageY - 40) + 'px'))
-      }
-      else {
-        return(toolTip.style('visibility', 'visible')
-                    .text(d.data + ': ' + seats + ' zetels')
-                    .style('left', (d3.event.pageX - 60) + 'px')
-                    .style('top', (d3.event.pageY - 40) + 'px'))
+    // update tooltip
+    d3.selectAll('.arc')
+      .data(piePol(parties))
+
+    // update tooltip
+    .on('mousemove', function(d) {
+        var seats = d.value
+        // check whether data is present
+        if (isNaN(seats)) {
+          return(toolTip.style('visibility', 'visible')
+                      .text('geen data beschikbaar')
+                      .style('left', (d3.event.pageX - 60) + 'px')
+                      .style('top', (d3.event.pageY - 40) + 'px'))
         }
-   });
+        else {
+          return(toolTip.style('visibility', 'visible')
+                      .text(d.data + ': ' + seats + ' zetels')
+                      .style('left', (d3.event.pageX - 60) + 'px')
+                      .style('top', (d3.event.pageY - 40) + 'px'))
+          }
+     });
+   }
 }
 
 function createPieRel(dataRel, municipalityRel, church, dataPol) {
@@ -865,52 +884,69 @@ function updatePieRel(dataRel, munName) {
    * upon clicking on the map
   */
 
-  // update title
-  d3.select('.pieTitleRel')
-     .text(function () {
-       return 'Kerkelijke gezindte in ' + munName;
-     })
-     .style('font-size', '18px');
+  // municipality does not exist anymore or is a weirdly named municipality in Friesland
+  if (dataRel[munName] === undefined) {
+    // update title
+    d3.select('.pieTitleRel')
+       .text(function () {
+         return 'gemeente bestaat niet meer na herindeling';
+       })
+       .style('font-size', '18px');
 
-  var selection = dataRel[munName];
-  var religion = Object.keys(selection);
+   // hide pie chart
+   d3.select('.groupRel')
+     .style('visibility', 'hidden');
+  }
+  // in case of existing municipality, show pie chart
+  else {
+    // update title
+    d3.select('.pieTitleRel')
+       .text(function () {
+         return 'Kerkelijke gezindte in ' + munName;
+       })
+       .style('font-size', '18px');
 
-  var pieHier = d3.pie()
-                  .padAngle(.05)
-                  .value(function(d) {
-                    return parseFloat(selection[d]);
-                  });
+    var selection = dataRel[munName];
+    var religion = Object.keys(selection);
 
-  // rescale segments
-  var groupRel = d3.select('.groupRel')
-  var groupRel = groupRel.selectAll('path')
-                         .data(pieHier(religion))
+    var pieHier = d3.pie()
+                    .padAngle(.05)
+                    .value(function(d) {
+                      return parseFloat(selection[d]);
+                    });
 
-  groupRel.transition()
-            .duration(200)
-            .attrTween("d", arcTween);
+    // rescale segments
+    var groupRel = d3.select('.groupRel')
+                     .style('visibility', 'visible')
+    var groupRel = groupRel.selectAll('path')
+                           .data(pieHier(religion))
 
-  // update the numbers bound to the arcs
-  d3.selectAll('.arcRel')
-    .data(pieHier(religion))
+    groupRel.transition()
+              .duration(200)
+              .attrTween("d", arcTween);
 
-  // update tooltip
-  .on('mousemove', function(d) {
-      var percentage = d.value
-      // check whether data is present
-      if (isNaN(percentage)) {
-        return(toolTip.style('visibility', 'visible')
-                    .text('geen data beschikbaar')
-                    .style('left', (d3.event.pageX - 60) + 'px')
-                    .style('top', (d3.event.pageY - 40) + 'px'))
-      }
-      else {
-        return(toolTip.style('visibility', 'visible')
-                      .text(d.data + ': ' + percentage + '%')
+    // update the numbers bound to the arcs
+    d3.selectAll('.arcRel')
+      .data(pieHier(religion))
+
+    // update tooltip
+    .on('mousemove', function(d) {
+        var percentage = d.value
+        // check whether data is present
+        if (isNaN(percentage)) {
+          return(toolTip.style('visibility', 'visible')
+                      .text('geen data beschikbaar')
                       .style('left', (d3.event.pageX - 60) + 'px')
-                      .style('top', (d3.event.pageY - 40) + 'px'));
+                      .style('top', (d3.event.pageY - 40) + 'px'))
         }
-  });
+        else {
+          return(toolTip.style('visibility', 'visible')
+                        .text(d.data + ': ' + percentage + '%')
+                        .style('left', (d3.event.pageX - 60) + 'px')
+                        .style('top', (d3.event.pageY - 40) + 'px'));
+          }
+    });
+  }
 }
 
 function createScatter(dataPol, dataRel, municipalityPol, parties, municipalityRel, church) {
