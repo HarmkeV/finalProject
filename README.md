@@ -66,4 +66,9 @@ The map doc contains all images displayed in the several markdown files. The map
 # License
 This project is licensed under a public release license - see the [LICENSE](LICENSE) file for details.
 
+# Link to video
+[video](https://youtu.be/Z5Nb3cq7Eic)
+
+Due to my stutter, there are some breaks in between words; just keep listening, I'll continue talking.
+
 © 2019 Harmke Vliek. No Rights Reserved.
