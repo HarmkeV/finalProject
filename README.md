@@ -51,7 +51,6 @@ The git contains a map called code, a map called doc and several markdown files.
 * [PROCESS.md](PROCESS.md), which contains information concerning choices that were made during the process;
 * [PROPOSAL.md](PROPOSAL.md), which contains a basic outline of the visualisation created at the start of the project;
 * [REPORT.md](REPORT.md), which is a report summarizing the course of the project and the reasons behind design choices;
-* [REVIEW.md](REVIEW.md), which contains a retrospective summary of the development of the visualisation;
 * [STYLE.md](STYLE.md), containing the style guide created by group I.
 
 The map doc contains all images displayed in the several markdown files. The map code contains the JavaScript file [visual.js](code/visual.js), in which all code necessary for rendering the visualisations is set, as well as the [html page](code/index.html) necessary to display a webpage. The file [about](about.html) serves to display information about the page. Therewithal the favicon, [css file](code/style.css) and the [conversion file](code/CONVERT2JSON.py) is set in there. All data is stored in the map data.
